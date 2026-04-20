@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #fef2f2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --primary: #6366f1;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  }
+}
