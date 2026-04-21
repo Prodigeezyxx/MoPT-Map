@@ -1,7 +1,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
-import { ALL_DELIVERABLES, ALL_OKRS, ALL_RISKS } from "./server-data";
+import { ALL_DELIVERABLES, ALL_OKRS, ALL_RISKS, TEAM_MEMBERS, SPRINT_PLAN } from "./server-data";
 
 async function startServer() {
   const app = express();
@@ -24,6 +24,14 @@ async function startServer() {
   
   app.get("/api/risks", (req, res) => {
     res.json(ALL_RISKS);
+  });
+
+  app.get("/api/team", (req, res) => {
+    res.json(TEAM_MEMBERS);
+  });
+
+  app.get("/api/sprints", (req, res) => {
+    res.json(SPRINT_PLAN);
   });
 
   // Vite middleware for development

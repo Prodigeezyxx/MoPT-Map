@@ -1,21 +1,12 @@
-import { useState, useEffect } from "react";
 import { AlertCircle } from "lucide-react";
-import { cn } from "../../lib/utils";
+import type { DataStoreShape } from "../../lib/dataStore";
 
-export default function RisksPage() {
-  const [risks, setRisks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+interface RisksPageProps {
+  data: DataStoreShape;
+}
 
-  useEffect(() => {
-    fetch("/api/risks")
-      .then(r => r.json())
-      .then(data => {
-        setRisks(data);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <div className="text-sm text-gray-500">Loading risks...</div>;
+export default function RisksPage({ data }: RisksPageProps) {
+  const risks = data.risks;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
