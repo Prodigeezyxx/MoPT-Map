@@ -49,3 +49,9 @@ CREATE TRIGGER trigger_app_data_updated_at
   BEFORE UPDATE ON app_data
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();
+
+-- 6. Enable Realtime for live sync across sessions
+-- This is REQUIRED for the live-sync feature to work.
+-- Run this if tables already exist and realtime isn't enabled:
+ALTER PUBLICATION supabase_realtime ADD TABLE app_data;
+ALTER PUBLICATION supabase_realtime ADD TABLE changelog;

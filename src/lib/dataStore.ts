@@ -151,6 +151,25 @@ let _cache: DataStoreShape | null = null;
 let _changelogCache: ChangelogEntry[] = [];
 let _initialized = false;
 
+// ─── Realtime Change Listeners ───────────────────────────
+// Components register callbacks to be notified when cloud data changes.
+type StoreChangeCallback = (data: DataStoreShape) => void;
+const _listeners: Set<StoreChangeCallback> = new Set();
+
+/** Register a callback that fires whenever cloud data changes (from any session). */
+export function onStoreChange(cb: StoreChangeCallback): () => void {
+  _listeners.add(cb);
+  return () => _listeners.delete(cb);
+}
+
+function _notifyListeners(): void {
+  if (_cache) {
+    for (const cb of _listeners) {
+      try { cb({ ..._cache }); } catch { /* ignore listener errors */ }
+    }
+  }
+}
+
 function getDefaults(): DataStoreShape {
   return {
     deliverables: ALL_DELIVERABLES.map((d) => ({ ...d })),
@@ -216,9 +235,79 @@ async function supabaseInsertChangelog(entry: ChangelogEntry): Promise<boolean> 
   }
 }
 
+// ─── Supabase Realtime Subscription ──────────────────────
+// Listens for INSERT/UPDATE on app_data so all open sessions
+// receive changes instantly without needing to refresh.
+
+let _realtimeSubscribed = false;
+
+function subscribeToRealtime(): void {
+  if (!supabase || _realtimeSubscribed) return;
+  _realtimeSubscribed = true;
+
+  supabase
+    .channel("app_data_changes")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "app_data" },
+      (payload) => {
+        // When any row in app_data changes, update the local cache
+        const key = (payload.new as Record<string, unknown>)?.key as string;
+        const value = (payload.new as Record<string, unknown>)?.value;
+        if (key && value && _cache && DATA_KEYS.includes(key as typeof DATA_KEYS[number])) {
+          ((_cache) as Record<string, unknown>)[key] = value;
+          console.log(`🔄 Realtime update: "${key}" synced from cloud`);
+          _notifyListeners();
+        }
+      }
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "changelog" },
+      (payload) => {
+        // When a new changelog entry arrives, prepend it
+        const row = payload.new as Record<string, unknown>;
+        if (row) {
+          const entry: ChangelogEntry = {
+            id: row.id as string,
+            timestamp: row.created_at as string,
+            admin: row.admin as string,
+            action: row.action as "create" | "update" | "delete",
+            entity: row.entity as string,
+            entityId: row.entity_id as string,
+            entityTitle: row.entity_title as string,
+            changes: row.changes as { field: string; oldValue: string; newValue: string }[],
+          };
+          // Avoid duplicates
+          if (!_changelogCache.find((e) => e.id === entry.id)) {
+            _changelogCache.unshift(entry);
+            console.log(`🔄 Realtime: new changelog entry from ${entry.admin}`);
+            _notifyListeners();
+          }
+        }
+      }
+    )
+    .subscribe((status) => {
+      if (status === "SUBSCRIBED") {
+        console.log("📡 Realtime subscription active — live sync enabled");
+      } else {
+        console.warn(`📡 Realtime status: ${status}`);
+      }
+    });
+}
+
+/** Disconnect the realtime subscription (call on app unmount). */
+export function unsubscribeRealtime(): void {
+  if (!supabase || !_realtimeSubscribed) return;
+  supabase.removeAllChannels();
+  _realtimeSubscribed = false;
+  console.log("📡 Realtime subscription disconnected");
+}
+
 // ─── Initialization ──────────────────────────────────────
 // Called once on app startup. Fetches from Supabase, seeds
 // if empty, falls back to localStorage if offline.
+// Also starts the Realtime subscription for live sync.
 
 export async function initStore(): Promise<DataStoreShape> {
   if (_initialized && _cache) return _cache;
@@ -273,6 +362,9 @@ export async function initStore(): Promise<DataStoreShape> {
         _cache = defaults;
         console.log("✅ Supabase seeded with defaults");
       }
+
+      // Start realtime sync
+      subscribeToRealtime();
 
       _initialized = true;
       return _cache;

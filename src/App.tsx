@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { LayoutDashboard, ListTodo, Map, AlertTriangle, BookOpen, Settings, Loader2 } from "lucide-react";
 import { cn } from "./lib/utils";
-import { getStore, initStore, type DataStoreShape } from "./lib/dataStore";
+import { getStore, initStore, onStoreChange, unsubscribeRealtime, type DataStoreShape } from "./lib/dataStore";
 import DashboardPage from "./components/pages/Dashboard";
 import DeliverablesPage from "./components/pages/Deliverables";
 import RoadmapPage from "./components/pages/Roadmap";
@@ -54,6 +54,16 @@ export default function App() {
       setData(storeData);
       setLoading(false);
     });
+
+    // Subscribe to realtime changes from other sessions
+    const unsubscribe = onStoreChange((updatedData) => {
+      setData(updatedData);
+    });
+
+    return () => {
+      unsubscribe();
+      unsubscribeRealtime();
+    };
   }, []);
 
   // ─── Restore admin session ────────────────────────────
