@@ -1309,11 +1309,11 @@ function DataManager({
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = (ev) => {
+      reader.onload = async (ev) => {
         try {
-          importData(ev.target?.result as string);
+          await importData(ev.target?.result as string);
           refresh();
-          showToast("Data imported successfully");
+          showToast("Data imported & synced to cloud");
         } catch {
           showToast("Import failed — invalid file");
         }
@@ -1326,10 +1326,10 @@ function DataManager({
   const handleReset = () => {
     setConfirm({
       message: "Reset ALL data to factory defaults? This will erase all your edits. This CANNOT be undone.",
-      action: () => {
-        resetToDefaults(admin);
+      action: async () => {
+        await resetToDefaults(admin);
         refresh();
-        showToast("Data reset to defaults");
+        showToast("Data reset to defaults & synced to cloud");
       },
     });
   };

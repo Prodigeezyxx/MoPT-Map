@@ -1,8 +1,11 @@
 /**
- * MoPT Data Store — localStorage-backed CMS data layer
- * Provides CRUD for all content types + changelog tracking
+ * MoPT Data Store — Supabase cloud-backed CMS data layer
+ * Uses an in-memory cache for fast synchronous reads.
+ * All writes persist to Supabase (cloud) + update local cache.
+ * Falls back to localStorage if Supabase is unreachable.
  */
 
+import { supabase } from "./supabase";
 import { ALL_DELIVERABLES, ALL_RISKS, ALL_OKRS, TEAM_MEMBERS, SPRINT_PLAN } from "../data";
 
 // ─── Types ───────────────────────────────────────────────
@@ -99,28 +102,28 @@ export interface DataStoreShape {
 
 const DEFAULT_ROADMAP: RoadmapData = {
   now: [
-    { title: "VR + LMS round-trip", description: "End-to-end data flow validated: complete a VR scenario, session data auto-submits to LMS backend, and appears on the web dashboard within 5 seconds. This is the foundational integration that proves our platform works as a connected system." },
-    { title: "Device Auth flow", description: "OAuth 2.0 Device Authorization (RFC 8628) implementation. Clinicians pair their VR headset by entering a 6-digit code on their phone at mopt.co.uk/link — no typing on VR keyboards. Owned by Joshua." },
-    { title: "Neonatal resus v1", description: "First complete clinical scenario: neonatal resuscitation with incubator, stethoscope, O2 administration, and medication interactions. Procedure graph authored by Dr. Olayinka, verified by Aladeojebi Adedotun Isaac. Must pass 72 FPS gate on Quest 3." },
-    { title: "Chat MoPT debrief", description: "AI-powered post-scenario debrief using the PEARLS framework: Reactions → Description → Analysis → Summary. Uses the rule-based assessor's evidence trace — the AI explains, it doesn't judge. Temperature locked at 0.0 for clinical facts." },
-    { title: "DPIA + Hazard Log", description: "Formal Data Protection Impact Assessment required before any real user data hits the database. Must be signed by Graham (IP/Legal). Hazard Log follows the DCB0129 standard for clinical risk management — both are mandatory for NHS procurement." },
-    { title: "KCL Private Beta", description: "6-week Private Beta with 15–20 King's College London clinicians and 2 educators. Exit criteria: ≥80% session completion rate, NPS ≥40, ≥20% competency-score improvement across 3 attempts. This is our proof point for institutional value." },
+    { title: "VR + LMS round-trip", description: "End-to-end data flow validated: complete a VR scenario, session data auto-submits to LMS backend, and appears on the web dashboard within 5 seconds." },
+    { title: "Device Auth flow", description: "OAuth 2.0 Device Authorization (RFC 8628) implementation. Clinicians pair their VR headset by entering a 6-digit code on their phone at mopt.co.uk/link." },
+    { title: "Neonatal resus v1", description: "First complete clinical scenario: neonatal resuscitation with incubator, stethoscope, O2 administration, and medication interactions." },
+    { title: "Chat MoPT debrief", description: "AI-powered post-scenario debrief using the PEARLS framework: Reactions → Description → Analysis → Summary." },
+    { title: "DPIA + Hazard Log", description: "Formal Data Protection Impact Assessment and DCB0129 Hazard Log — both mandatory for NHS procurement." },
+    { title: "KCL Private Beta", description: "6-week Private Beta with 15–20 King's College London clinicians and 2 educators." },
   ],
   next: [
-    { title: "Instructor dashboards", description: "Web dashboards for educators: cohort performance tables with red flags for students failing critical steps >2 times, drill-down to individual Chat MoPT transcripts, and module assignment tools. This is what makes institutions want to pay." },
-    { title: "Cohort analytics", description: "Aggregated analytics across a class or institution: average scores, completion rates, common failure points, time-to-competency trends. Provides the ROI evidence NHS training directors need for procurement approval." },
-    { title: "Scenario authoring v1", description: "Standardized pipeline for creating new clinical modules: SME intake → storyboard → VR build → clinical review → versioned release. Goal: produce 1 new module every 6 weeks. Hire Clinical Content Designer to run the pipeline." },
-    { title: "2nd + 3rd modules", description: "Expand beyond neonatal resuscitation to adult Advanced Life Support (ALS) and sepsis recognition scenarios. Each follows the same procedure graph → assessor → telemetry → debrief pipeline. Verified by Aladeojebi Adedotun Isaac." },
-    { title: "SSO (SAML/OIDC) for institutions", description: "Single Sign-On integration so NHS trusts and universities can use their existing identity systems. Eliminates the need for clinicians to create separate MoPT accounts — reduces onboarding friction for institutional buyers." },
-    { title: "Self-serve billing", description: "Automated billing system for the £21/£31 per month consumer plans and institutional seat management. Reduces COO overhead and enables self-service institutional purchasing without manual invoicing." },
+    { title: "Instructor dashboards", description: "Web dashboards for educators: cohort performance tables, drill-down to individual Chat MoPT transcripts, and module assignment tools." },
+    { title: "Cohort analytics", description: "Aggregated analytics across a class or institution: average scores, completion rates, common failure points." },
+    { title: "Scenario authoring v1", description: "Standardized pipeline for creating new clinical modules: SME intake → storyboard → VR build → clinical review → versioned release." },
+    { title: "2nd + 3rd modules", description: "Expand beyond neonatal resuscitation to adult ALS and sepsis recognition scenarios." },
+    { title: "SSO (SAML/OIDC) for institutions", description: "Single Sign-On integration so NHS trusts and universities can use their existing identity systems." },
+    { title: "Self-serve billing", description: "Automated billing system for the £21/£31 per month consumer plans and institutional seat management." },
   ],
   later: [
-    { title: "Multi-specialty library", description: "Expand beyond emergency medicine to cover paediatric anaphylaxis, obstetric emergencies, airway management, and more. Each specialty requires dedicated SME partnerships and content agreements with IP ownership clarity." },
-    { title: "International (Nigeria, UAE)", description: "Internationalization prep: localized clinical guidelines (not just language), regional regulatory compliance, local payment processors, and potential partnerships with medical schools in Lagos and Dubai." },
-    { title: "Pico/Vision Pro support", description: "Expand hardware support beyond Meta Quest to Pico headsets (popular in enterprise) and Apple Vision Pro. Requires significant rendering optimization and platform-specific UI adaptation for each device." },
-    { title: "Peer-reviewed outcome study", description: "Publish Kirkpatrick L3 evidence in a peer-reviewed medical education journal. Requires 3-6 month longitudinal data from beta cohorts showing transfer of VR training to actual clinical practice." },
-    { title: "ISO 27001 certification", description: "Enterprise-grade information security certification. Required by many large NHS trusts and international institutions for procurement. Stage 1 readiness begins in Q4, full certification targeted for following year." },
-    { title: "Scenario marketplace for SMEs", description: "Platform where external Subject Matter Experts can author, publish, and earn royalties from clinical scenarios they create. Transforms MoPT from a product into a platform ecosystem." },
+    { title: "Multi-specialty library", description: "Expand beyond emergency medicine to cover paediatric anaphylaxis, obstetric emergencies, airway management, and more." },
+    { title: "International (Nigeria, UAE)", description: "Internationalization prep: localized clinical guidelines, regional regulatory compliance, local payment processors." },
+    { title: "Pico/Vision Pro support", description: "Expand hardware support beyond Meta Quest to Pico headsets and Apple Vision Pro." },
+    { title: "Peer-reviewed outcome study", description: "Publish Kirkpatrick L3 evidence in a peer-reviewed medical education journal." },
+    { title: "ISO 27001 certification", description: "Enterprise-grade information security certification. Required by many large NHS trusts." },
+    { title: "Scenario marketplace for SMEs", description: "Platform where external Subject Matter Experts can author, publish, and earn royalties from clinical scenarios." },
   ],
 };
 
@@ -140,12 +143,13 @@ const DEFAULT_BRANDING: Branding = {
   subtitle: "Product Roadmap",
 };
 
-// ─── Storage Keys ────────────────────────────────────────
+// ─── In-Memory Cache ─────────────────────────────────────
+// This cache provides fast synchronous reads while Supabase
+// handles persistence. All UI components read from this cache.
 
-const STORE_KEY = "mopt_data_store";
-const CHANGELOG_KEY = "mopt_changelog";
-
-// ─── Core Functions ──────────────────────────────────────
+let _cache: DataStoreShape | null = null;
+let _changelogCache: ChangelogEntry[] = [];
+let _initialized = false;
 
 function getDefaults(): DataStoreShape {
   return {
@@ -160,52 +164,176 @@ function getDefaults(): DataStoreShape {
   };
 }
 
-export function getStore(): DataStoreShape {
+// ─── Supabase Helpers ────────────────────────────────────
+
+const DATA_KEYS = ["deliverables", "risks", "okrs", "team", "sprints", "roadmap", "kpis", "branding"] as const;
+
+async function supabaseGet(key: string): Promise<unknown | null> {
+  if (!supabase) return null;
   try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as DataStoreShape;
-      // Ensure all keys exist (handle store upgrades)
-      const defaults = getDefaults();
-      return {
-        deliverables: parsed.deliverables ?? defaults.deliverables,
-        risks: parsed.risks ?? defaults.risks,
-        okrs: parsed.okrs ?? defaults.okrs,
-        team: parsed.team ?? defaults.team,
-        sprints: parsed.sprints ?? defaults.sprints,
-        roadmap: parsed.roadmap ?? defaults.roadmap,
-        kpis: parsed.kpis ?? defaults.kpis,
-        branding: parsed.branding ?? defaults.branding,
-      };
-    }
+    const { data, error } = await supabase
+      .from("app_data")
+      .select("value")
+      .eq("key", key)
+      .single();
+    if (error || !data) return null;
+    return data.value;
   } catch {
-    // If localStorage is corrupted, fall back to defaults
+    return null;
   }
-  return getDefaults();
 }
 
-function saveStore(store: DataStoreShape): void {
-  localStorage.setItem(STORE_KEY, JSON.stringify(store));
-}
-
-// ─── Changelog ───────────────────────────────────────────
-
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
-
-export function getChangelog(): ChangelogEntry[] {
+async function supabaseSet(key: string, value: unknown): Promise<boolean> {
+  if (!supabase) return false;
   try {
-    const raw = localStorage.getItem(CHANGELOG_KEY);
-    if (raw) return JSON.parse(raw);
+    const { error } = await supabase
+      .from("app_data")
+      .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" });
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+async function supabaseInsertChangelog(entry: ChangelogEntry): Promise<boolean> {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase
+      .from("changelog")
+      .insert({
+        id: entry.id,
+        created_at: entry.timestamp,
+        admin: entry.admin,
+        action: entry.action,
+        entity: entry.entity,
+        entity_id: entry.entityId,
+        entity_title: entry.entityTitle,
+        changes: entry.changes,
+      });
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+// ─── Initialization ──────────────────────────────────────
+// Called once on app startup. Fetches from Supabase, seeds
+// if empty, falls back to localStorage if offline.
+
+export async function initStore(): Promise<DataStoreShape> {
+  if (_initialized && _cache) return _cache;
+
+  const defaults = getDefaults();
+
+  if (supabase) {
+    try {
+      // Try fetching deliverables as a health check
+      const testData = await supabaseGet("deliverables");
+
+      if (testData !== null) {
+        // Supabase has data — load everything
+        const store: DataStoreShape = { ...defaults };
+
+        for (const key of DATA_KEYS) {
+          const val = await supabaseGet(key);
+          if (val !== null) {
+            (store as Record<string, unknown>)[key] = val;
+          }
+        }
+
+        _cache = store;
+
+        // Load changelog
+        const { data: logData } = await supabase
+          .from("changelog")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(500);
+
+        if (logData) {
+          _changelogCache = logData.map((row: Record<string, unknown>) => ({
+            id: row.id as string,
+            timestamp: row.created_at as string,
+            admin: row.admin as string,
+            action: row.action as "create" | "update" | "delete",
+            entity: row.entity as string,
+            entityId: row.entity_id as string,
+            entityTitle: row.entity_title as string,
+            changes: row.changes as { field: string; oldValue: string; newValue: string }[],
+          }));
+        }
+
+        console.log("✅ Data loaded from Supabase cloud");
+      } else {
+        // Supabase is empty — seed it with defaults
+        console.log("🌱 Seeding Supabase with default data...");
+        for (const key of DATA_KEYS) {
+          await supabaseSet(key, (defaults as Record<string, unknown>)[key]);
+        }
+        _cache = defaults;
+        console.log("✅ Supabase seeded with defaults");
+      }
+
+      _initialized = true;
+      return _cache;
+    } catch (err) {
+      console.warn("⚠️ Supabase unreachable, falling back to localStorage", err);
+    }
+  }
+
+  // Fallback: localStorage
+  try {
+    const raw = localStorage.getItem("mopt_data_store");
+    if (raw) {
+      _cache = JSON.parse(raw);
+    }
   } catch {
     // ignore
   }
-  return [];
+
+  if (!_cache) _cache = defaults;
+  _initialized = true;
+
+  // Try loading changelog from localStorage
+  try {
+    const raw = localStorage.getItem("mopt_changelog");
+    if (raw) _changelogCache = JSON.parse(raw);
+  } catch {
+    // ignore
+  }
+
+  return _cache;
 }
 
-function saveChangelog(entries: ChangelogEntry[]): void {
-  localStorage.setItem(CHANGELOG_KEY, JSON.stringify(entries));
+// ─── Core Read Functions (synchronous, from cache) ───────
+
+export function getStore(): DataStoreShape {
+  if (_cache) return _cache;
+  // If somehow called before init, return defaults
+  return getDefaults();
+}
+
+export function getChangelog(): ChangelogEntry[] {
+  return _changelogCache;
+}
+
+// ─── Persist Helpers ─────────────────────────────────────
+// These fire-and-forget to Supabase, with localStorage backup.
+
+function persistSection(key: string, value: unknown): void {
+  // Always save to localStorage as backup
+  if (_cache) {
+    localStorage.setItem("mopt_data_store", JSON.stringify(_cache));
+  }
+
+  // Push to Supabase in background (fire and forget)
+  supabaseSet(key, value).then((ok) => {
+    if (!ok) console.warn(`⚠️ Failed to sync "${key}" to cloud`);
+  });
+}
+
+function generateId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
 export function logChange(
@@ -216,8 +344,7 @@ export function logChange(
   entityTitle: string,
   changes: { field: string; oldValue: string; newValue: string }[]
 ): void {
-  const changelog = getChangelog();
-  changelog.unshift({
+  const entry: ChangelogEntry = {
     id: generateId(),
     timestamp: new Date().toISOString(),
     admin,
@@ -226,8 +353,17 @@ export function logChange(
     entityId,
     entityTitle,
     changes,
+  };
+
+  _changelogCache.unshift(entry);
+
+  // Backup to localStorage
+  localStorage.setItem("mopt_changelog", JSON.stringify(_changelogCache));
+
+  // Push to Supabase
+  supabaseInsertChangelog(entry).then((ok) => {
+    if (!ok) console.warn("⚠️ Failed to sync changelog to cloud");
   });
-  saveChangelog(changelog);
 }
 
 // ─── Deliverables CRUD ──────────────────────────────────
@@ -248,7 +384,7 @@ export function updateDeliverable(admin: string, id: string, updates: Partial<De
   }
 
   store.deliverables[idx] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("deliverables", store.deliverables);
   if (changes.length > 0) logChange(admin, "update", "Deliverable", id, old.title, changes);
   return store;
 }
@@ -256,7 +392,7 @@ export function updateDeliverable(admin: string, id: string, updates: Partial<De
 export function addDeliverable(admin: string, item: Deliverable): DataStoreShape {
   const store = getStore();
   store.deliverables.push(item);
-  saveStore(store);
+  persistSection("deliverables", store.deliverables);
   logChange(admin, "create", "Deliverable", item.id, item.title, [
     { field: "all", oldValue: "", newValue: JSON.stringify(item) },
   ]);
@@ -267,7 +403,7 @@ export function deleteDeliverable(admin: string, id: string): DataStoreShape {
   const store = getStore();
   const item = store.deliverables.find((d) => d.id === id);
   store.deliverables = store.deliverables.filter((d) => d.id !== id);
-  saveStore(store);
+  persistSection("deliverables", store.deliverables);
   if (item) logChange(admin, "delete", "Deliverable", id, item.title, []);
   return store;
 }
@@ -290,7 +426,7 @@ export function updateRisk(admin: string, id: string, updates: Partial<Risk>): D
   }
 
   store.risks[idx] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("risks", store.risks);
   if (changes.length > 0) logChange(admin, "update", "Risk", id, old.risk.slice(0, 60), changes);
   return store;
 }
@@ -298,7 +434,7 @@ export function updateRisk(admin: string, id: string, updates: Partial<Risk>): D
 export function addRisk(admin: string, item: Risk): DataStoreShape {
   const store = getStore();
   store.risks.push(item);
-  saveStore(store);
+  persistSection("risks", store.risks);
   logChange(admin, "create", "Risk", item.id, item.risk.slice(0, 60), [
     { field: "all", oldValue: "", newValue: JSON.stringify(item) },
   ]);
@@ -309,7 +445,7 @@ export function deleteRisk(admin: string, id: string): DataStoreShape {
   const store = getStore();
   const item = store.risks.find((r) => r.id === id);
   store.risks = store.risks.filter((r) => r.id !== id);
-  saveStore(store);
+  persistSection("risks", store.risks);
   if (item) logChange(admin, "delete", "Risk", id, item.risk.slice(0, 60), []);
   return store;
 }
@@ -339,7 +475,7 @@ export function updateOKR(admin: string, id: string, updates: Partial<OKR>): Dat
   }
 
   store.okrs[idx] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("okrs", store.okrs);
   if (changes.length > 0) logChange(admin, "update", "OKR", id, old.objective, changes);
   return store;
 }
@@ -361,7 +497,7 @@ export function updateTeamMember(admin: string, index: number, updates: Partial<
   }
 
   store.team[index] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("team", store.team);
   if (changes.length > 0) logChange(admin, "update", "Team Member", String(index), old.name, changes);
   return store;
 }
@@ -369,7 +505,7 @@ export function updateTeamMember(admin: string, index: number, updates: Partial<
 export function addTeamMember(admin: string, member: TeamMember): DataStoreShape {
   const store = getStore();
   store.team.push(member);
-  saveStore(store);
+  persistSection("team", store.team);
   logChange(admin, "create", "Team Member", String(store.team.length - 1), member.name, [
     { field: "all", oldValue: "", newValue: JSON.stringify(member) },
   ]);
@@ -380,7 +516,7 @@ export function deleteTeamMember(admin: string, index: number): DataStoreShape {
   const store = getStore();
   const member = store.team[index];
   store.team.splice(index, 1);
-  saveStore(store);
+  persistSection("team", store.team);
   if (member) logChange(admin, "delete", "Team Member", String(index), member.name, []);
   return store;
 }
@@ -402,7 +538,7 @@ export function updateSprint(admin: string, index: number, updates: Partial<Spri
   }
 
   store.sprints[index] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("sprints", store.sprints);
   if (changes.length > 0) logChange(admin, "update", "Sprint", old.sprint, `Sprint ${old.sprint}: ${old.theme}`, changes);
   return store;
 }
@@ -410,7 +546,7 @@ export function updateSprint(admin: string, index: number, updates: Partial<Spri
 export function addSprint(admin: string, sprint: Sprint): DataStoreShape {
   const store = getStore();
   store.sprints.push(sprint);
-  saveStore(store);
+  persistSection("sprints", store.sprints);
   logChange(admin, "create", "Sprint", sprint.sprint, `Sprint ${sprint.sprint}: ${sprint.theme}`, [
     { field: "all", oldValue: "", newValue: JSON.stringify(sprint) },
   ]);
@@ -421,7 +557,7 @@ export function deleteSprint(admin: string, index: number): DataStoreShape {
   const store = getStore();
   const sprint = store.sprints[index];
   store.sprints.splice(index, 1);
-  saveStore(store);
+  persistSection("sprints", store.sprints);
   if (sprint) logChange(admin, "delete", "Sprint", sprint.sprint, `Sprint ${sprint.sprint}: ${sprint.theme}`, []);
   return store;
 }
@@ -449,7 +585,7 @@ export function updateRoadmapItem(
   }
 
   items[index] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("roadmap", store.roadmap);
   if (changes.length > 0) logChange(admin, "update", `Roadmap (${lane})`, String(index), old.title, changes);
   return store;
 }
@@ -457,7 +593,7 @@ export function updateRoadmapItem(
 export function addRoadmapItem(admin: string, lane: "now" | "next" | "later", item: RoadmapItem): DataStoreShape {
   const store = getStore();
   store.roadmap[lane].push(item);
-  saveStore(store);
+  persistSection("roadmap", store.roadmap);
   logChange(admin, "create", `Roadmap (${lane})`, String(store.roadmap[lane].length - 1), item.title, [
     { field: "all", oldValue: "", newValue: JSON.stringify(item) },
   ]);
@@ -468,7 +604,7 @@ export function deleteRoadmapItem(admin: string, lane: "now" | "next" | "later",
   const store = getStore();
   const item = store.roadmap[lane][index];
   store.roadmap[lane].splice(index, 1);
-  saveStore(store);
+  persistSection("roadmap", store.roadmap);
   if (item) logChange(admin, "delete", `Roadmap (${lane})`, String(index), item.title, []);
   return store;
 }
@@ -490,7 +626,7 @@ export function updateKPI(admin: string, index: number, updates: Partial<KPIMetr
   }
 
   store.kpis[index] = { ...old, ...updates };
-  saveStore(store);
+  persistSection("kpis", store.kpis);
   if (changes.length > 0) logChange(admin, "update", "KPI", String(index), old.label, changes);
   return store;
 }
@@ -498,7 +634,7 @@ export function updateKPI(admin: string, index: number, updates: Partial<KPIMetr
 export function addKPI(admin: string, kpi: KPIMetric): DataStoreShape {
   const store = getStore();
   store.kpis.push(kpi);
-  saveStore(store);
+  persistSection("kpis", store.kpis);
   logChange(admin, "create", "KPI", String(store.kpis.length - 1), kpi.label, [
     { field: "all", oldValue: "", newValue: JSON.stringify(kpi) },
   ]);
@@ -509,7 +645,7 @@ export function deleteKPI(admin: string, index: number): DataStoreShape {
   const store = getStore();
   const kpi = store.kpis[index];
   store.kpis.splice(index, 1);
-  saveStore(store);
+  persistSection("kpis", store.kpis);
   if (kpi) logChange(admin, "delete", "KPI", String(index), kpi.label, []);
   return store;
 }
@@ -529,7 +665,7 @@ export function updateBranding(admin: string, updates: Partial<Branding>): DataS
   }
 
   store.branding = { ...old, ...updates };
-  saveStore(store);
+  persistSection("branding", store.branding);
   if (changes.length > 0) logChange(admin, "update", "Branding", "branding", "Site Branding", changes);
   return store;
 }
@@ -540,21 +676,40 @@ export function exportData(): string {
   return JSON.stringify({ store: getStore(), changelog: getChangelog() }, null, 2);
 }
 
-export function importData(json: string): DataStoreShape {
+export async function importData(json: string): Promise<DataStoreShape> {
   const parsed = JSON.parse(json);
-  if (parsed.store) {
-    saveStore(parsed.store);
-    if (parsed.changelog) saveChangelog(parsed.changelog);
-    return parsed.store;
+  if (!parsed.store) throw new Error("Invalid data format");
+
+  _cache = parsed.store;
+  if (parsed.changelog) _changelogCache = parsed.changelog;
+
+  // Save to localStorage
+  localStorage.setItem("mopt_data_store", JSON.stringify(_cache));
+  localStorage.setItem("mopt_changelog", JSON.stringify(_changelogCache));
+
+  // Sync all sections to Supabase
+  for (const key of DATA_KEYS) {
+    await supabaseSet(key, (_cache as Record<string, unknown>)[key]);
   }
-  throw new Error("Invalid data format");
+
+  return _cache;
 }
 
-export function resetToDefaults(admin: string): DataStoreShape {
+export async function resetToDefaults(admin: string): Promise<DataStoreShape> {
   const defaults = getDefaults();
-  saveStore(defaults);
+  _cache = defaults;
+
+  // Save to localStorage
+  localStorage.setItem("mopt_data_store", JSON.stringify(_cache));
+
+  // Sync all sections to Supabase
+  for (const key of DATA_KEYS) {
+    await supabaseSet(key, (defaults as Record<string, unknown>)[key]);
+  }
+
   logChange(admin, "update", "System", "reset", "Full Data Reset", [
     { field: "action", oldValue: "custom data", newValue: "factory defaults restored" },
   ]);
+
   return defaults;
 }

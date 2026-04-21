@@ -4,9 +4,9 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { LayoutDashboard, ListTodo, Map, AlertTriangle, BookOpen, Settings } from "lucide-react";
+import { LayoutDashboard, ListTodo, Map, AlertTriangle, BookOpen, Settings, Loader2 } from "lucide-react";
 import { cn } from "./lib/utils";
-import { getStore, type DataStoreShape } from "./lib/dataStore";
+import { getStore, initStore, type DataStoreShape } from "./lib/dataStore";
 import DashboardPage from "./components/pages/Dashboard";
 import DeliverablesPage from "./components/pages/Deliverables";
 import RoadmapPage from "./components/pages/Roadmap";
@@ -19,7 +19,8 @@ type Page = "dashboard" | "deliverables" | "roadmap" | "risks" | "documentation"
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
-  const [data, setData] = useState<DataStoreShape>(getStore());
+  const [data, setData] = useState<DataStoreShape | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // ─── Admin State ──────────────────────────────────────
   const [showLogin, setShowLogin] = useState(false);
@@ -40,13 +41,20 @@ export default function App() {
     if (clickTimestamps.current.length >= 5) {
       clickTimestamps.current = [];
       if (adminUser) {
-        // Already logged in — go to admin panel
         setCurrentPage("admin");
       } else {
         setShowLogin(true);
       }
     }
   }, [adminUser]);
+
+  // ─── Initialize Store from Supabase ───────────────────
+  useEffect(() => {
+    initStore().then((storeData) => {
+      setData(storeData);
+      setLoading(false);
+    });
+  }, []);
 
   // ─── Restore admin session ────────────────────────────
   useEffect(() => {
@@ -56,7 +64,7 @@ export default function App() {
 
   // ─── Refresh data from store ──────────────────────────
   const refreshData = useCallback(() => {
-    setData(getStore());
+    setData({ ...getStore() });
   }, []);
 
   const handleLogin = (name: string) => {
@@ -78,6 +86,21 @@ export default function App() {
     { id: "deliverables", label: "Deliverables", icon: ListTodo },
     { id: "risks", label: "Risks Register", icon: AlertTriangle },
   ];
+
+  // ─── Loading State ────────────────────────────────────
+  if (loading || !data) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center" style={{ background: 'var(--bg-gradient)' }}>
+        <div className="glass p-8 flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--primary)' }} />
+          <div className="text-center">
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-main)' }}>MoPT</h2>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Loading from cloud...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const renderPage = () => {
     switch (currentPage) {
