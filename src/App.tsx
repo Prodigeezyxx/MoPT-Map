@@ -123,7 +123,7 @@ export default function App() {
       case "risks":
         return <RisksPage data={data} />;
       case "documentation":
-        return <DocumentationPage />;
+        return <DocumentationPage data={data} />;
       case "admin":
         return adminUser ? (
           <AdminPanel

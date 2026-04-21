@@ -21,6 +21,7 @@ import {
   Database,
   Edit3,
   Check,
+  BookOpen,
 } from "lucide-react";
 import {
   type DataStoreShape,
@@ -41,6 +42,8 @@ import {
   addRisk,
   deleteRisk,
   updateOKR,
+  addOKR,
+  deleteOKR,
   updateTeamMember,
   addTeamMember,
   deleteTeamMember,
@@ -58,6 +61,7 @@ import {
   importData,
   resetToDefaults,
 } from "../../lib/dataStore";
+import DocumentationEditor from "./DocumentationEditor";
 
 type AdminTab =
   | "deliverables"
@@ -68,6 +72,7 @@ type AdminTab =
   | "roadmap"
   | "kpis"
   | "branding"
+  | "documentation"
   | "changelog"
   | "data";
 
@@ -256,6 +261,7 @@ export default function AdminPanel({ admin, onDataChange, onLogout }: AdminPanel
     { id: "roadmap", label: "Roadmap", icon: Map },
     { id: "kpis", label: "KPIs", icon: Gauge },
     { id: "branding", label: "Branding", icon: Palette },
+    { id: "documentation", label: "Docs", icon: BookOpen },
     { id: "changelog", label: "Changelog", icon: History },
     { id: "data", label: "Data", icon: Database },
   ];
@@ -310,7 +316,7 @@ export default function AdminPanel({ admin, onDataChange, onLogout }: AdminPanel
           <RisksEditor data={data} admin={admin} refresh={refresh} showToast={showToast} setConfirm={setConfirmAction} />
         )}
         {activeTab === "okrs" && (
-          <OKRsEditor data={data} admin={admin} refresh={refresh} showToast={showToast} />
+          <OKRsEditor data={data} admin={admin} refresh={refresh} showToast={showToast} setConfirm={setConfirmAction} />
         )}
         {activeTab === "team" && (
           <TeamEditor data={data} admin={admin} refresh={refresh} showToast={showToast} setConfirm={setConfirmAction} />
@@ -326,6 +332,9 @@ export default function AdminPanel({ admin, onDataChange, onLogout }: AdminPanel
         )}
         {activeTab === "branding" && (
           <BrandingEditor data={data} admin={admin} refresh={refresh} showToast={showToast} />
+        )}
+        {activeTab === "documentation" && (
+          <DocumentationEditor data={data} admin={admin} refresh={refresh} showToast={showToast} setConfirm={setConfirmAction} />
         )}
         {activeTab === "changelog" && <ChangelogViewer />}
         {activeTab === "data" && (
@@ -691,14 +700,18 @@ function OKRsEditor({
   admin,
   refresh,
   showToast,
+  setConfirm,
 }: {
   data: DataStoreShape;
   admin: string;
   refresh: () => void;
   showToast: (msg: string) => void;
+  setConfirm: (a: { message: string; action: () => void } | null) => void;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<OKR>>({});
+  const [showAdd, setShowAdd] = useState(false);
+  const [newItem, setNewItem] = useState<OKR>({ id: "", objective: "", keyResults: [""], owner: "" });
 
   const startEdit = (o: OKR) => { setEditingId(o.id); setEditForm({ ...o, keyResults: [...o.keyResults] }); };
 
@@ -727,9 +740,49 @@ function OKRsEditor({
     setEditForm({ ...editForm, keyResults: krs });
   };
 
+  const updateNewKR = (idx: number, value: string) => {
+    const krs = [...newItem.keyResults];
+    krs[idx] = value;
+    setNewItem({ ...newItem, keyResults: krs });
+  };
+
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-main)" }}>OKRs ({data.okrs.length})</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold" style={{ color: "var(--text-main)" }}>OKRs ({data.okrs.length})</h3>
+        <button onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={{ background: "var(--primary)" }}>
+          <Plus className="w-3 h-3" /> Add OKR
+        </button>
+      </div>
+
+      {showAdd && (
+        <div className="mb-4 p-4 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)" }}>
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <Input label="ID (e.g. O4)" value={newItem.id} onChange={(v) => setNewItem({ ...newItem, id: v })} />
+            <Input label="Owner" value={newItem.owner} onChange={(v) => setNewItem({ ...newItem, owner: v })} />
+          </div>
+          <Input label="Objective" value={newItem.objective} onChange={(v) => setNewItem({ ...newItem, objective: v })} />
+          <div className="mt-3">
+            <label className="block text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Key Results</label>
+            {newItem.keyResults.map((kr, idx) => (
+              <div key={idx} className="flex gap-2 mb-2">
+                <input value={kr} onChange={(e) => updateNewKR(idx, e.target.value)} className="flex-1 px-3 py-2 rounded-lg text-xs outline-none" style={{ background: "rgba(255,255,255,0.6)", border: "1px solid var(--glass-border)", color: "var(--text-main)" }} />
+                {newItem.keyResults.length > 1 && (
+                  <button onClick={() => setNewItem({ ...newItem, keyResults: newItem.keyResults.filter((_, i) => i !== idx) })} className="p-1.5 rounded-lg" style={{ color: "var(--danger)" }}><Trash2 className="w-3 h-3" /></button>
+                )}
+              </div>
+            ))}
+            <button onClick={() => setNewItem({ ...newItem, keyResults: [...newItem.keyResults, ""] })} className="flex items-center gap-1 text-[10px] font-semibold mt-1" style={{ color: "var(--primary)" }}>
+              <Plus className="w-3 h-3" /> Add Key Result
+            </button>
+          </div>
+          <div className="flex gap-2 mt-3">
+            <button onClick={() => { if (!newItem.id || !newItem.objective) return; addOKR(admin, newItem); refresh(); showToast("OKR added"); setShowAdd(false); setNewItem({ id: "", objective: "", keyResults: [""], owner: "" }); }} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={{ background: "var(--success)" }}><Save className="w-3 h-3" /> Save</button>
+            <button onClick={() => setShowAdd(false)} className="px-3 py-1.5 rounded-lg text-xs" style={{ color: "var(--text-muted)" }}>Cancel</button>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-4">
         {data.okrs.map((okr) => (
           <div key={okr.id} className="p-5 rounded-xl" style={{ background: "rgba(255,255,255,0.5)", border: "1px solid var(--glass-border)", borderLeft: "4px solid var(--primary)" }}>
@@ -764,10 +817,15 @@ function OKRsEditor({
                 </div>
               </div>
             ) : (
-              <div onClick={() => startEdit(okr)} className="cursor-pointer">
+              <div className="cursor-pointer" onClick={() => startEdit(okr)}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.1)", color: "var(--primary)" }}>{okr.id}</span>
-                  <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{okr.owner}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{okr.owner}</span>
+                    <button onClick={(e) => { e.stopPropagation(); setConfirm({ message: `Delete OKR "${okr.objective.slice(0, 50)}"?`, action: () => { deleteOKR(admin, okr.id); refresh(); showToast("OKR deleted"); } }); }} className="p-1 rounded" style={{ color: "var(--danger)" }}>
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
                 <h4 className="text-sm font-semibold mb-2" style={{ color: "var(--text-main)" }}>{okr.objective}</h4>
                 <ul className="space-y-1">
@@ -777,7 +835,6 @@ function OKRsEditor({
                     </li>
                   ))}
                 </ul>
-                <p className="text-[10px] mt-2 opacity-0 hover:opacity-100" style={{ color: "var(--primary)" }}>Click to edit</p>
               </div>
             )}
           </div>
@@ -1156,27 +1213,64 @@ function BrandingEditor({
   const handleSave = () => {
     updateBranding(admin, form);
     refresh();
-    showToast("Branding updated");
+    showToast("Branding & dashboard settings updated");
   };
 
   return (
-    <div className="max-w-md">
-      <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-main)" }}>Branding</h3>
-      <div className="space-y-4">
-        <Input label="Sidebar Title" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
-        <Input label="Sidebar Subtitle" value={form.subtitle} onChange={(v) => setForm({ ...form, subtitle: v })} />
-
-        {/* Preview */}
-        <div className="p-4 rounded-xl" style={{ background: "rgba(255,255,255,0.5)", border: "1px solid var(--glass-border)" }}>
-          <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Preview</p>
-          <h1 className="text-xl font-bold tracking-tight" style={{ color: "var(--text-main)" }}>{form.title || "MoPT"}</h1>
-          <p className="text-xs font-semibold uppercase tracking-wider mt-1" style={{ color: "var(--text-muted)" }}>{form.subtitle || "Product Roadmap"}</p>
+    <div className="max-w-2xl">
+      <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-main)" }}>Branding & Dashboard Settings</h3>
+      
+      {/* Sidebar Branding */}
+      <div className="mb-6">
+        <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Sidebar</p>
+        <div className="grid grid-cols-2 gap-3">
+          <Input label="Sidebar Title" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
+          <Input label="Sidebar Subtitle" value={form.subtitle} onChange={(v) => setForm({ ...form, subtitle: v })} />
         </div>
-
-        <button onClick={handleSave} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white" style={{ background: "var(--primary)" }}>
-          <Save className="w-3 h-3" /> Save Changes
-        </button>
       </div>
+
+      {/* Dashboard Settings */}
+      <div className="mb-6">
+        <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Dashboard Page</p>
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          <Input label="Dashboard Title" value={form.dashboardTitle || ""} onChange={(v) => setForm({ ...form, dashboardTitle: v })} />
+          <Input label="Dashboard Subtitle" value={form.dashboardSubtitle || ""} onChange={(v) => setForm({ ...form, dashboardSubtitle: v })} />
+        </div>
+      </div>
+
+      {/* North Star Settings */}
+      <div className="mb-6">
+        <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>North Star Metric</p>
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          <Input label="Label" value={form.northStarLabel || ""} onChange={(v) => setForm({ ...form, northStarLabel: v })} />
+          <Input label="Metric Name" value={form.northStarMetric || ""} onChange={(v) => setForm({ ...form, northStarMetric: v })} />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Input label="Target" value={form.northStarTarget || ""} onChange={(v) => setForm({ ...form, northStarTarget: v })} />
+        </div>
+        <div className="mt-3">
+          <Input label="Description" value={form.northStarDescription || ""} onChange={(v) => setForm({ ...form, northStarDescription: v })} multiline />
+        </div>
+      </div>
+
+      {/* Preview */}
+      <div className="p-4 rounded-xl mb-4" style={{ background: "rgba(255,255,255,0.5)", border: "1px solid var(--glass-border)" }}>
+        <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Preview</p>
+        <div className="flex items-center gap-6">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight" style={{ color: "var(--text-main)" }}>{form.title || "MoPT"}</h1>
+            <p className="text-xs font-semibold uppercase tracking-wider mt-1" style={{ color: "var(--text-muted)" }}>{form.subtitle || "Product Roadmap"}</p>
+          </div>
+          <div style={{ borderLeft: "1px solid var(--glass-border)", paddingLeft: "1.5rem" }}>
+            <p className="text-xs font-semibold" style={{ color: "var(--text-main)" }}>{form.dashboardTitle || "Dashboard"}</p>
+            <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{form.dashboardSubtitle || "Version 2.0"}</p>
+          </div>
+        </div>
+      </div>
+
+      <button onClick={handleSave} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white" style={{ background: "var(--primary)" }}>
+        <Save className="w-3 h-3" /> Save Changes
+      </button>
     </div>
   );
 }

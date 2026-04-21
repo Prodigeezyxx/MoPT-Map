@@ -108,7 +108,6 @@ export const TEAM_MEMBERS = [
   { name: "Dr. Olayinka Kowobari", role: "CEO / Clinical Lead", area: "Leadership" },
   { name: "Adetola", role: "CFO / COO", area: "Leadership" },
   { name: "Dr. Tara", role: "VR Academic Lead / UX", area: "VR" },
-  { name: "Oluwatosin", role: "Unity Developer", area: "VR" },
   { name: "Joshua", role: "VR / Tech Lead", area: "Engineering" },
   { name: "Alexander Olaiya", role: "ML/AI Engineer", area: "AI/ML" },
   { name: "Matt", role: "ML/AI Engineer (Classical ML & CV)", area: "AI/ML" },

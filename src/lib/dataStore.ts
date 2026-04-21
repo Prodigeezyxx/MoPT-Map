@@ -74,6 +74,12 @@ export interface KPIMetric {
 export interface Branding {
   title: string;
   subtitle: string;
+  dashboardTitle: string;
+  dashboardSubtitle: string;
+  northStarLabel: string;
+  northStarMetric: string;
+  northStarDescription: string;
+  northStarTarget: string;
 }
 
 export interface ChangelogEntry {
@@ -87,6 +93,29 @@ export interface ChangelogEntry {
   changes: { field: string; oldValue: string; newValue: string }[];
 }
 
+export interface DocContentBlock {
+  type: "p" | "ul" | "ol" | "table" | "callout" | "code" | "label";
+  text?: string;
+  items?: string[];
+  headers?: string[];
+  rows?: string[][];
+  calloutType?: "info" | "warn" | "danger";
+}
+
+export interface DocSection {
+  id: string;
+  title: string;
+  level: number; // 0 = part heading, 1 = section
+  blocks: DocContentBlock[];
+}
+
+export interface DocMeta {
+  title: string;
+  version: string;
+  preparedBy: string;
+  date: string;
+}
+
 export interface DataStoreShape {
   deliverables: Deliverable[];
   risks: Risk[];
@@ -96,6 +125,8 @@ export interface DataStoreShape {
   roadmap: RoadmapData;
   kpis: KPIMetric[];
   branding: Branding;
+  docMeta: DocMeta;
+  docSections: DocSection[];
 }
 
 // ─── Default Data ────────────────────────────────────────
@@ -141,6 +172,19 @@ const DEFAULT_KPIS: KPIMetric[] = [
 const DEFAULT_BRANDING: Branding = {
   title: "MoPT",
   subtitle: "Product Roadmap",
+  dashboardTitle: "Dashboard",
+  dashboardSubtitle: "Version 2.0 — The World-Class Edition",
+  northStarLabel: "North Star Metric",
+  northStarMetric: "W-CM/AL",
+  northStarDescription: "Weekly Competency-Minutes per Active Learner (W-CM/AL): the sum of VR minutes weighted by competency gain, averaged across active learners per week. Target: ≥45 min/learner/week.",
+  northStarTarget: "Target: ≥45 min/wk",
+};
+
+const DEFAULT_DOC_META: DocMeta = {
+  title: "MoPT Product Manager Master Execution Pack",
+  version: "Version 2.0 \u2014 The World-Class Edition",
+  preparedBy: "Iyobosa Rehoboth — Senior Product Manager",
+  date: "April 2026",
 };
 
 // ─── In-Memory Cache ─────────────────────────────────────
@@ -180,12 +224,14 @@ function getDefaults(): DataStoreShape {
     roadmap: JSON.parse(JSON.stringify(DEFAULT_ROADMAP)),
     kpis: DEFAULT_KPIS.map((k) => ({ ...k })),
     branding: { ...DEFAULT_BRANDING },
+    docMeta: { ...DEFAULT_DOC_META },
+    docSections: [],
   };
 }
 
 // ─── Supabase Helpers ────────────────────────────────────
 
-const DATA_KEYS = ["deliverables", "risks", "okrs", "team", "sprints", "roadmap", "kpis", "branding"] as const;
+const DATA_KEYS = ["deliverables", "risks", "okrs", "team", "sprints", "roadmap", "kpis", "branding", "docMeta", "docSections"] as const;
 
 async function supabaseGet(key: string): Promise<unknown | null> {
   if (!supabase) return null;
@@ -572,6 +618,25 @@ export function updateOKR(admin: string, id: string, updates: Partial<OKR>): Dat
   return store;
 }
 
+export function addOKR(admin: string, okr: OKR): DataStoreShape {
+  const store = getStore();
+  store.okrs.push(okr);
+  persistSection("okrs", store.okrs);
+  logChange(admin, "create", "OKR", okr.id, okr.objective, [
+    { field: "all", oldValue: "", newValue: JSON.stringify(okr) },
+  ]);
+  return store;
+}
+
+export function deleteOKR(admin: string, id: string): DataStoreShape {
+  const store = getStore();
+  const item = store.okrs.find((o) => o.id === id);
+  store.okrs = store.okrs.filter((o) => o.id !== id);
+  persistSection("okrs", store.okrs);
+  if (item) logChange(admin, "delete", "OKR", id, item.objective, []);
+  return store;
+}
+
 // ─── Team CRUD ──────────────────────────────────────────
 
 export function updateTeamMember(admin: string, index: number, updates: Partial<TeamMember>): DataStoreShape {
@@ -749,16 +814,84 @@ export function updateBranding(admin: string, updates: Partial<Branding>): DataS
   const old = store.branding;
   const changes: { field: string; oldValue: string; newValue: string }[] = [];
 
-  if (updates.title && updates.title !== old.title) {
-    changes.push({ field: "title", oldValue: old.title, newValue: updates.title });
-  }
-  if (updates.subtitle && updates.subtitle !== old.subtitle) {
-    changes.push({ field: "subtitle", oldValue: old.subtitle, newValue: updates.subtitle });
+  for (const [key, newVal] of Object.entries(updates)) {
+    const oldVal = (old as Record<string, unknown>)[key];
+    if (oldVal !== newVal) {
+      changes.push({ field: key, oldValue: String(oldVal ?? ""), newValue: String(newVal) });
+    }
   }
 
   store.branding = { ...old, ...updates };
   persistSection("branding", store.branding);
   if (changes.length > 0) logChange(admin, "update", "Branding", "branding", "Site Branding", changes);
+  return store;
+}
+
+// ─── Documentation CRUD ─────────────────────────────────
+
+export function updateDocMeta(admin: string, updates: Partial<DocMeta>): DataStoreShape {
+  const store = getStore();
+  const old = store.docMeta;
+  const changes: { field: string; oldValue: string; newValue: string }[] = [];
+
+  for (const [key, newVal] of Object.entries(updates)) {
+    const oldVal = (old as any)[key];
+    if (oldVal !== newVal) {
+      changes.push({ field: key, oldValue: String(oldVal ?? ""), newValue: String(newVal) });
+    }
+  }
+
+  store.docMeta = { ...old, ...updates };
+  persistSection("docMeta", store.docMeta);
+  if (changes.length > 0) logChange(admin, "update", "Documentation", "docMeta", "Document Metadata", changes);
+  return store;
+}
+
+export function updateDocSection(admin: string, sectionId: string, updates: Partial<DocSection>): DataStoreShape {
+  const store = getStore();
+  const idx = store.docSections.findIndex((s) => s.id === sectionId);
+  if (idx === -1) return store;
+
+  const old = store.docSections[idx];
+  store.docSections[idx] = { ...old, ...updates };
+  persistSection("docSections", store.docSections);
+  logChange(admin, "update", "Documentation Section", sectionId, old.title, [
+    { field: "content", oldValue: "(previous)", newValue: "(updated)" },
+  ]);
+  return store;
+}
+
+export function addDocSection(admin: string, section: DocSection): DataStoreShape {
+  const store = getStore();
+  store.docSections.push(section);
+  persistSection("docSections", store.docSections);
+  logChange(admin, "create", "Documentation Section", section.id, section.title, [
+    { field: "all", oldValue: "", newValue: section.title },
+  ]);
+  return store;
+}
+
+export function deleteDocSection(admin: string, sectionId: string): DataStoreShape {
+  const store = getStore();
+  const item = store.docSections.find((s) => s.id === sectionId);
+  store.docSections = store.docSections.filter((s) => s.id !== sectionId);
+  persistSection("docSections", store.docSections);
+  if (item) logChange(admin, "delete", "Documentation Section", sectionId, item.title, []);
+  return store;
+}
+
+export function reorderDocSections(admin: string, sectionIds: string[]): DataStoreShape {
+  const store = getStore();
+  const ordered: DocSection[] = [];
+  for (const id of sectionIds) {
+    const s = store.docSections.find((sec) => sec.id === id);
+    if (s) ordered.push(s);
+  }
+  store.docSections = ordered;
+  persistSection("docSections", store.docSections);
+  logChange(admin, "update", "Documentation", "order", "Section Reorder", [
+    { field: "order", oldValue: "(previous)", newValue: "(reordered)" },
+  ]);
   return store;
 }
 
@@ -781,7 +914,7 @@ export async function importData(json: string): Promise<DataStoreShape> {
 
   // Sync all sections to Supabase
   for (const key of DATA_KEYS) {
-    await supabaseSet(key, (_cache as Record<string, unknown>)[key]);
+    await supabaseSet(key, (_cache as any)[key]);
   }
 
   return _cache;
@@ -796,7 +929,7 @@ export async function resetToDefaults(admin: string): Promise<DataStoreShape> {
 
   // Sync all sections to Supabase
   for (const key of DATA_KEYS) {
-    await supabaseSet(key, (defaults as Record<string, unknown>)[key]);
+    await supabaseSet(key, (defaults as any)[key]);
   }
 
   logChange(admin, "update", "System", "reset", "Full Data Reset", [

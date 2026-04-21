@@ -12,6 +12,7 @@ import {
   Star,
   ArrowUp,
 } from "lucide-react";
+import type { DataStoreShape, DocContentBlock } from "../../lib/dataStore";
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface TocEntry {
@@ -357,7 +358,40 @@ function TocSidebar({
 }
 
 // â”€â”€â”€ Main Documentation Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-export default function DocumentationPage() {
+// ─── Dynamic Block Renderer ─────────────────────────────
+function RenderBlock({ block }: { block: DocContentBlock }) {
+  switch (block.type) {
+    case "p":
+      return <Para>{block.text}</Para>;
+    case "label":
+      return (
+        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>
+          {block.text}
+        </p>
+      );
+    case "ul":
+      return <BulletList items={block.items || []} />;
+    case "ol":
+      return <NumberedList items={block.items || []} />;
+    case "table":
+      return <DataTable headers={block.headers || []} rows={block.rows || []} />;
+    case "callout":
+      return <Callout type={block.calloutType || "info"}>{block.text}</Callout>;
+    case "code":
+      return <CodeBlock>{block.text || ""}</CodeBlock>;
+    default:
+      return null;
+  }
+}
+
+interface DocumentationPageProps {
+  data?: DataStoreShape;
+}
+
+// ─── Main Documentation Page ─────────────────────────────
+export default function DocumentationPage({ data }: DocumentationPageProps) {
+  const hasCustomSections = data && data.docSections && data.docSections.length > 0;
+  const docMeta = data?.docMeta;
   const [activeSection, setActiveSection] = useState("executive-summary");
   const [showBackToTop, setShowBackToTop] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -416,19 +450,37 @@ export default function DocumentationPage() {
             Living Document â€” Review Quarterly
           </p>
           <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: "var(--text-main)" }}>
-            MoPT Product Manager Master Execution Pack
+            {docMeta?.title || "MoPT Product Manager Master Execution Pack"}
           </h1>
           <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
-            Version 2.0 â€” The World-Class Edition
+            {docMeta?.version || "Version 2.0 â€” The World-Class Edition"}
           </p>
           <div className="flex flex-wrap gap-4 text-[11px]" style={{ color: "var(--text-muted)" }}>
-            <span>Prepared by: PM/Innovation Lead</span>
+            <span>Prepared by: {docMeta?.preparedBy || "PM/Innovation Lead"}</span>
             <span>â€¢</span>
-            <span>Date: April 2026</span>
+            <span>Date: {docMeta?.date || "April 2026"}</span>
             <span>â€¢</span>
             <span>Status: Living document</span>
           </div>
         </div>
+
+        {/* Dynamic Sections (if custom content exists in the data store) */}
+        {hasCustomSections && (
+          <div className="mb-8">
+            {data!.docSections.map((section) => (
+              <div key={section.id}>
+                {section.level === 0 ? (
+                  <SectionHeading id={section.id}>{section.title}</SectionHeading>
+                ) : (
+                  <SubHeading id={section.id}>{section.title}</SubHeading>
+                )}
+                {section.blocks.map((block, bi) => (
+                  <RenderBlock key={bi} block={block} />
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
 
         <Callout type="info">
           <strong>Why this v2.0 exists:</strong> The initial draft of our execution plan was purely tactical, focusing solely on software features and the immediate beta. It critically missed the realities of building a MedTech product in the UK. This v2.0 rebuild establishes a world-class foundation integrating NHS regulatory compliance, rigorous learning science, clinical safety protocols, ethical AI governance, institutional procurement realities, and long-term crisis management.

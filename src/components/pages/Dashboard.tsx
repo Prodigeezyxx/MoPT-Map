@@ -81,8 +81,8 @@ export default function DashboardPage({ data }: DashboardPageProps) {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h2 className="text-3xl font-light tracking-tight" style={{ color: 'var(--text-main)' }}>Dashboard</h2>
-        <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Version 2.0 — The World-Class Edition</p>
+        <h2 className="text-3xl font-light tracking-tight" style={{ color: 'var(--text-main)' }}>{data.branding.dashboardTitle || "Dashboard"}</h2>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>{data.branding.dashboardSubtitle || "Version 2.0 — The World-Class Edition"}</p>
       </div>
 
       {/* Row 1: Key Stats */}
@@ -147,17 +147,17 @@ export default function DashboardPage({ data }: DashboardPageProps) {
         </ClickableCard>
 
         <ClickableCard
-          title="North Star Metric"
-          description="Weekly Competency-Minutes per Active Learner (W-CM/AL): the sum of VR minutes weighted by competency gain, averaged across active learners per week. Target: ≥45 min/learner/week."
+          title={data.branding.northStarLabel || "North Star Metric"}
+          description={data.branding.northStarDescription || "Weekly Competency-Minutes per Active Learner (W-CM/AL): the sum of VR minutes weighted by competency gain, averaged across active learners per week. Target: ≥45 min/learner/week."}
           style={{ background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)' }}
         >
-          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--primary)' }}>North Star Metric</p>
+          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--primary)' }}>{data.branding.northStarLabel || "North Star Metric"}</p>
           <div className="mt-3 flex flex-col gap-1">
-            <span className="text-lg font-medium tracking-tight" style={{ color: 'var(--text-main)' }}>W-CM/AL</span>
+            <span className="text-lg font-medium tracking-tight" style={{ color: 'var(--text-main)' }}>{data.branding.northStarMetric || "W-CM/AL"}</span>
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Competency-Mins per Learner</span>
           </div>
           <div className="mt-4 flex items-center gap-1 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-            <Target className="w-3.5 h-3.5" /> Target: ≥45 min/wk
+            <Target className="w-3.5 h-3.5" /> {data.branding.northStarTarget || "Target: ≥45 min/wk"}
           </div>
         </ClickableCard>
       </div>
