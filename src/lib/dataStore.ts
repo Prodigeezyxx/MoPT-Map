@@ -138,7 +138,7 @@ const DEFAULT_ROADMAP: RoadmapData = {
     { title: "Neonatal resus v1", description: "First complete clinical scenario: neonatal resuscitation with incubator, stethoscope, O2 administration, and medication interactions." },
     { title: "Chat MoPT debrief", description: "AI-powered post-scenario debrief using the PEARLS framework: Reactions → Description → Analysis → Summary." },
     { title: "DPIA + Hazard Log", description: "Formal Data Protection Impact Assessment and DCB0129 Hazard Log — both mandatory for NHS procurement." },
-    { title: "KCL Private Beta", description: "6-week Private Beta with 15–20 King's College London clinicians and 2 educators." },
+    { title: "Institutional Private Beta", description: "6-week Private Beta with 15–20 clinicians and educators from partner educational institutions." },
   ],
   next: [
     { title: "Instructor dashboards", description: "Web dashboards for educators: cohort performance tables, drill-down to individual Chat MoPT transcripts, and module assignment tools." },
@@ -175,7 +175,7 @@ const DEFAULT_BRANDING: Branding = {
   dashboardTitle: "Dashboard",
   dashboardSubtitle: "Version 2.0 — The World-Class Edition",
   northStarLabel: "North Star Metric",
-  northStarMetric: "W-CM/AL",
+  northStarMetric: "ECR",
   northStarDescription: "Weekly Competency-Minutes per Active Learner (W-CM/AL): the sum of VR minutes weighted by competency gain, averaged across active learners per week. Target: ≥45 min/learner/week.",
   northStarTarget: "Target: ≥45 min/wk",
 };

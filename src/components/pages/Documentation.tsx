@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import type { DataStoreShape, DocContentBlock } from "../../lib/dataStore";
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -€-€-€ Types -€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€
 interface TocEntry {
   id: string;
   label: string;
@@ -23,7 +23,7 @@ interface TocEntry {
   children?: TocEntry[];
 }
 
-// â”€â”€â”€ Table of Contents Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -€-€-€ Table of Contents Data -€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€
 const TOC: TocEntry[] = [
   {
     id: "executive-summary",
@@ -39,7 +39,7 @@ const TOC: TocEntry[] = [
   },
   {
     id: "part-i",
-    label: "Part I â€” Foundations",
+    label: "Part I -” Foundations",
     level: 0,
     icon: FileText,
     children: [
@@ -50,7 +50,7 @@ const TOC: TocEntry[] = [
   },
   {
     id: "part-ii",
-    label: "Part II â€” Discovery & Validation",
+    label: "Part II -” Discovery & Validation",
     level: 0,
     icon: FileText,
     children: [
@@ -61,19 +61,19 @@ const TOC: TocEntry[] = [
   },
   {
     id: "part-iii",
-    label: "Part III â€” PRDs",
+    label: "Part III -” PRDs",
     level: 0,
     icon: FileText,
     children: [
-      { id: "sec-7", label: "7. PRD â€” Unity VR Client", level: 1 },
-      { id: "sec-8", label: "8. PRD â€” Web Client & Dashboards", level: 1 },
-      { id: "sec-9", label: "9. PRD â€” LMS Integration & API", level: 1 },
-      { id: "sec-10", label: "10. PRD â€” Chat MoPT (AI)", level: 1 },
+      { id: "sec-7", label: "7. PRD -” Unity VR Client", level: 1 },
+      { id: "sec-8", label: "8. PRD -” Web Client & Dashboards", level: 1 },
+      { id: "sec-9", label: "9. PRD -” LMS Integration & API", level: 1 },
+      { id: "sec-10", label: "10. PRD -” Chat MoPT (AI)", level: 1 },
     ],
   },
   {
     id: "part-iv",
-    label: "Part IV â€” Regulatory, Safety & Trust",
+    label: "Part IV -” Regulatory, Safety & Trust",
     level: 0,
     icon: Shield,
     children: [
@@ -85,7 +85,7 @@ const TOC: TocEntry[] = [
   },
   {
     id: "part-v",
-    label: "Part V â€” Execution System",
+    label: "Part V -” Execution System",
     level: 0,
     icon: Rocket,
     children: [
@@ -97,56 +97,32 @@ const TOC: TocEntry[] = [
   },
   {
     id: "part-vi",
-    label: "Part VI â€” Go-to-Market",
+    label: "Part VI -” Go-to-Market",
     level: 0,
     icon: Rocket,
     children: [
       { id: "sec-19", label: "19. Beta Program Design", level: 1 },
       { id: "sec-20", label: "20. Institutional Sales", level: 1 },
-      { id: "sec-21", label: "21. Pricing & Unit Economics", level: 1 },
       { id: "sec-22", label: "22. Customer Success & Hardware", level: 1 },
     ],
   },
   {
     id: "part-vii",
-    label: "Part VII â€” Team & Stakeholders",
+    label: "Part VII -” Team & Stakeholders",
     level: 0,
     icon: Users,
     children: [
       { id: "sec-23", label: "23. Stakeholder Map & RACI", level: 1 },
       { id: "sec-24", label: "24. Advisory Boards", level: 1 },
-      { id: "sec-25", label: "25. Hiring & Team Scaling", level: 1 },
-    ],
-  },
-  {
-    id: "part-viii",
-    label: "Part VIII â€” Analytics & KPIs",
-    level: 0,
-    icon: BarChart3,
-    children: [
-      { id: "sec-26", label: "26. Analytics Infrastructure", level: 1 },
-      { id: "sec-27", label: "27. KPI Operating Model", level: 1 },
-      { id: "sec-28", label: "28. Experimentation", level: 1 },
-    ],
-  },
-  {
-    id: "part-ix",
-    label: "Part IX â€” Risk, Crisis & Governance",
-    level: 0,
-    icon: AlertTriangle,
-    children: [
-      { id: "sec-29", label: "29. Risk Register", level: 1 },
-      { id: "sec-30", label: "30. Crisis Playbooks", level: 1 },
-      { id: "sec-31", label: "31. Decision Records", level: 1 },
     ],
   },
   {
     id: "part-x",
-    label: "Part X â€” Personal Excellence",
+    label: "Part X — Team Self-Check",
     level: 0,
     icon: Star,
     children: [
-      { id: "sec-32", label: "32. Personal Excellence", level: 1 },
+      { id: "sec-32", label: "32. Team Self-Check", level: 1 },
       { id: "sec-33", label: "33. Master 47-Deliverables Tracker", level: 1 },
     ],
   },
@@ -158,7 +134,7 @@ const TOC: TocEntry[] = [
   },
 ];
 
-// â”€â”€â”€ Reusable Sub-Components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -€-€-€ Reusable Sub-Components -€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€
 
 function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
@@ -288,7 +264,7 @@ function NumberedList({ items }: { items: string[] }) {
   );
 }
 
-// â”€â”€â”€ TOC Sidebar Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -€-€-€ TOC Sidebar Component -€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€
 
 function TocSidebar({
   activeId,
@@ -357,7 +333,7 @@ function TocSidebar({
   );
 }
 
-// â”€â”€â”€ Main Documentation Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -€-€-€ Main Documentation Page -€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€-€
 // ─── Dynamic Block Renderer ─────────────────────────────
 function RenderBlock({ block }: { block: DocContentBlock }) {
   switch (block.type) {
@@ -447,19 +423,19 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
         {/* Title Block */}
         <div className="glass p-8 mb-8" style={{ borderLeft: "4px solid var(--primary)" }}>
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2" style={{ color: "var(--primary)" }}>
-            Living Document â€” Review Quarterly
+            Living Document -” Review Quarterly
           </p>
           <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: "var(--text-main)" }}>
             {docMeta?.title || "MoPT Product Manager Master Execution Pack"}
           </h1>
           <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
-            {docMeta?.version || "Version 2.0 â€” The World-Class Edition"}
+            {docMeta?.version || "Version 2.0 -” The World-Class Edition"}
           </p>
           <div className="flex flex-wrap gap-4 text-[11px]" style={{ color: "var(--text-muted)" }}>
             <span>Prepared by: {docMeta?.preparedBy || "PM/Innovation Lead"}</span>
-            <span>â€¢</span>
+            <span>-¢</span>
             <span>Date: {docMeta?.date || "April 2026"}</span>
-            <span>â€¢</span>
+            <span>-¢</span>
             <span>Status: Living document</span>
           </div>
         </div>
@@ -486,16 +462,16 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           <strong>Why this v2.0 exists:</strong> The initial draft of our execution plan was purely tactical, focusing solely on software features and the immediate beta. It critically missed the realities of building a MedTech product in the UK. This v2.0 rebuild establishes a world-class foundation integrating NHS regulatory compliance, rigorous learning science, clinical safety protocols, ethical AI governance, institutional procurement realities, and long-term crisis management.
         </Callout>
 
-        {/* â”€â”€â”€â”€â”€â”€ EXECUTIVE SUMMARY â”€â”€â”€â”€â”€â”€ */}
+        {/* -€-€-€-€-€-€ EXECUTIVE SUMMARY -€-€-€-€-€-€ */}
         <SectionHeading id="executive-summary">Executive Summary</SectionHeading>
         <Para>
-          MoPT (Mo Personal Trainer) is forging a new category in medical education by bridging high-fidelity Unity VR simulations, an advanced web LMS, and Agentic AI (Chat MoPT). Our immediate target is executing a flawless Closed Beta with King's College London and select NHS Trusts, proving our core value proposition to support our Â£21/Â£31/mo commercial tiers.
+          MoPT (Mo Personal Trainer) is forging a new category in medical education by bridging high-fidelity Unity VR simulations, an advanced web LMS, and Agentic AI (Chat MoPT). Our immediate target is executing a flawless Closed Beta with partner educational institutions and select NHS Trusts, proving our core value proposition to support our £21/£31/mo commercial tiers.
         </Para>
         <Para>
           To succeed, we are making critical bets on frictionless Device Auth for VR, dynamic LLM-driven clinical debriefs, and an uncompromising commitment to clinical realism. Our regulatory posture embraces NHS DTAC and DCB0129 compliance proactively, ensuring institutional trust.
         </Para>
         <Para>
-          Our North Star metricâ€”<strong>Weekly Competency-Minutes per Active Learner</strong>â€”aligns our product success directly with clinical learning outcomes. The top risks we must navigate are VR cybersickness (FPS drops), Chat MoPT medical hallucinations, PII leakage, Meta App Lab constraints, and the key-person dependency on our sole Unity developer.
+          Our North Star metric-”<strong>Weekly Competency-Minutes per Active Learner</strong>-”aligns our product success directly with clinical learning outcomes. The top risks we must navigate are VR cybersickness (FPS drops), Chat MoPT medical hallucinations, PII leakage, Meta App Lab constraints, and key-person dependencies on core technical roles.
         </Para>
 
         <div className="glass p-6 mb-6">
@@ -504,14 +480,13 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             headers={["Audience", "Focus Areas"]}
             rows={[
               ["CEO (Dr. Olayinka) & COO (Adetola)", "Parts I (Strategy), VI (GTM/Pricing), and IX (Risk & Crisis)"],
-              ["VR Lead (Dr. Tara) & Unity Dev (Oluwatosin)", "Parts III (PRD - VR), V (Execution), and VI (QA)"],
-              ["VR/Tech Lead (Joshua)", "Sections 8, 9, 10 (Web, API, AI PRDs) and Section 12 (Data Privacy)"],
+              ["VR/Tech Lead (Joshua)", "Parts III (PRD - VR), V (Execution), VI (QA), Sections 8, 9, 10 (Web, API, AI PRDs) and Section 12 (Data Privacy)"],
               ["Advisors (Gigi, Dr. Janice, Ayokunnu, Graham)", "Part VII (Stakeholders) and Part IV (Regulatory)"],
             ]}
           />
         </div>
 
-        {/* â”€â”€â”€â”€â”€â”€ 12 NON-NEGOTIABLES â”€â”€â”€â”€â”€â”€ */}
+        {/* -€-€-€-€-€-€ 12 NON-NEGOTIABLES -€-€-€-€-€-€ */}
         <SectionHeading id="non-negotiables">The 12 Things This Pack Insists On (Non-Negotiables)</SectionHeading>
         <NumberedList
           items={[
@@ -525,13 +500,13 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             'No "Nice to Haves": If it doesn\'t serve the Beta hypotheses, it is cut from the sprint.',
             "Blameless Post-Mortems: When things break, we fix systems, we do not blame people.",
             "Accessibility as Default: Subtitles, seated mode, and left-hand dominance are P0 features.",
-            "Idempotency in APIs: All Unity â†’ LMS data submissions must be safely retryable.",
+            "Idempotency in APIs: All Unity -’ LMS data submissions must be safely retryable.",
             "Clinical Sign-off: Dr. Olayinka must formally approve every scenario before it hits `main`.",
           ]}
         />
 
-        {/* â”€â”€â”€â”€â”€â”€ PART I â€” FOUNDATIONS â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-i">Part I â€” Foundations</SectionHeading>
+        {/* -€-€-€-€-€-€ PART I -” FOUNDATIONS -€-€-€-€-€-€ */}
+        <SectionHeading id="part-i">Part I -” Foundations</SectionHeading>
 
         <SubHeading id="sec-1">1. PM Operating Philosophy & Personal Charter</SubHeading>
         <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>North Star Principles</p>
@@ -540,58 +515,54 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             "Clinical Realism: We are building a medical simulator, not a video game. If a mechanic contradicts NHS guidelines, it is rejected.",
             "Frictionless Learning: Time-to-value is paramount. Clinicians are exhausted. The UI must be invisible, and the hardware must disappear into the experience.",
             "Evidence Over Opinion: We resolve debates using user telemetry, clinical guidelines, and A/B test data, not HiPPO (Highest Paid Person's Opinion).",
-            "Shield the Team: Oluwatosin and Joshua must operate in deep work states. I absorb organizational chaos and emit structured Jira tickets.",
+            "Shield the Team: Joshua and the engineering team must operate in deep work states. I absorb organizational chaos and emit structured Jira tickets.",
             "Ship to Learn: We validate assumptions by putting headsets on real clinicians as early as safely possible.",
           ]}
         />
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Definition of Excellent Execution</p>
         <Para>
-          Excellence in my role means establishing high-fidelity connective tissue. I must translate Dr. Olayinka's medical expertise into logic gates, Dr. Tara's XR academic research into spatial UI constraints, Adetola's budget realities into scope management, and Graham's legal warnings into GDPR-compliant API architectures.
+          Excellence in my role means establishing high-fidelity connective tissue. I must translate medical expertise into logic gates, academic research into spatial UI constraints, budget realities into scope management, and legal warnings into GDPR-compliant API architectures.
         </Para>
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Operating Cadence & Rituals</p>
         <BulletList
           items={[
-            "Daily: Triage blockers. 15-minute async Slack standup. Unblock Unity dev.",
-            "Weekly: 1:1 with functional leads. Feature review. Send Executive Status Report.",
+            "Daily: Triage blockers. 15-minute async Slack standup. Unblock engineering.",
+            "Weekly: Interface with functional leads. Feature review. Send Executive Status Report.",
             "Sprint (Bi-weekly): Backlog grooming. Sprint Planning. Demo & Retrospective.",
             "Monthly: KPI & OKR review. Risk Register audit. Advisory Board summary.",
             "Quarterly: Strategic roadmap refresh. Clinical Safety Group review.",
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Decision-Making Framework (RAPID)</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Decision-Making Framework (RACI)</p>
         <DataTable
-          headers={["Decision Type", "Recommend", "Agree", "Perform", "Input", "Decide"]}
+          headers={["Decision Type", "Responsible", "Accountable", "Consulted", "Informed"]}
           rows={[
-            ["Clinical Scenario Accuracy", "Prof. Olaosun", "Dr. Olayinka", "PM / Unity Dev", "Clinical SMEs", "Dr. Olayinka"],
-            ["VR Architecture / Tech Stack", "Unity Dev", "Dr. Tara", "Unity Dev", "PM / Joshua", "Dr. Tara"],
-            ["API & Web LMS Arch", "Joshua", "PM", "Joshua", "Unity Dev", "Joshua"],
-            ["Sprint Prioritization", "PM", "Founders", "Team", "Advisors / Leads", "PM"],
+            ["Clinical Scenario Accuracy", "PM / VR Team", "Dr. Olayinka", "Prof. Olaosun / Clinical SMEs", "Founders / Advisors"],
+            ["VR Architecture / Tech Stack", "Joshua (VR/Tech Lead)", "Joshua", "PM / Engineering Team", "Founders / Advisors"],
+            ["API & Web LMS Arch", "Joshua", "Joshua", "PM", "Engineering Team"],
+            ["Sprint Prioritization", "PM", "PM", "Founders / Leads", "Advisors / Team"],
           ]}
         />
-
-        <Callout type="info">
-          <strong>Working Agreement with Oluwatosin (Unity Dev):</strong> Specs will always include wireframes, expected haptics, and success criteria. We will pair-program/review VR builds twice a week utilizing Meta Quest Casting. If a ticket lacks clear acceptance criteria, Oluwatosin has full authority to reject it back to the PM.
-        </Callout>
 
         <Callout type="warn">
           <strong>Anti-Patterns to Avoid:</strong> Hero Mode (PM trying to do QA, UX, and Scrum Master simultaneously), Premature Optimization (building robust multiplayer for Beta), Jira-Bound (more time formatting tickets than talking to clinicians).
         </Callout>
 
-        {/* â”€â”€ Section 2 â”€â”€ */}
+        {/* -€-€ Section 2 -€-€ */}
         <SubHeading id="sec-2">2. First 30 / 60 / 90 Day PM Onboarding Plan</SubHeading>
         <DataTable
           headers={["Phase", "Focus", "Key Actions & Milestones"]}
           rows={[
-            ["Days 1â€“30 (Listen & Audit)", "Context gathering & baseline mapping", "Conduct 1:1s with all founders and advisors. Deliverable: LMS Architecture Audit completed with Joshua. Deliverable: Master Backlog created and triaged in Jira. Shadow 3 clinical SMEs."],
-            ["Days 31â€“60 (Align & Structure)", "Establishing the engine", "Implement bi-weekly sprint ceremonies. Deliverable: DPIA drafted and submitted to Graham. Deliverable: OKRs drafted and signed off by CEO. Clinical Safety Officer explicitly appointed."],
-            ["Days 61â€“90 (Deliver Beta)", "Execution & Go-to-Market", "Deliverable: Private Beta launched with KCL. End-to-end data pipeline validated. Initiate institutional pricing discovery with Adetola."],
+            ["Days 1-“30 (Listen & Audit)", "Context gathering & baseline mapping", "Conduct 1:1s with all founders and advisors. Deliverable: LMS Architecture Audit completed with Joshua. Deliverable: Master Backlog created and triaged in Jira. Shadow 3 clinical SMEs."],
+            ["Days 31-“60 (Align & Structure)", "Establishing the engine", "Implement bi-weekly sprint ceremonies. Deliverable: DPIA drafted and submitted to Graham. Deliverable: OKRs drafted and signed off by CEO. Clinical Safety Officer explicitly appointed."],
+            ["Days 61-“90 (Deliver Beta)", "Execution & Go-to-Market", "Deliverable: Private Beta launched with partner educational institutions. End-to-end data pipeline validated. Initiate institutional pricing discovery with Adetola."],
           ]}
         />
 
-        {/* â”€â”€ Section 3 â”€â”€ */}
+        {/* -€-€ Section 3 -€-€ */}
         <SubHeading id="sec-3">3. Product Vision, Strategy & North Star Metric</SubHeading>
         <div className="glass p-6 mb-6" style={{ borderLeft: "4px solid var(--primary)" }}>
           <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "var(--primary)" }}>Vision</p>
@@ -600,7 +571,24 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           <p className="text-sm" style={{ color: "var(--text-muted)" }}>To provide accessible, AI-guided, high-fidelity VR clinical skills training that translates directly to institutional competency and improved patient safety.</p>
         </div>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Competitive Landscape</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>North Star Metric: Competence Development</p>
+        <Callout type="info">
+          <strong>North Star:</strong> Percentage of active learners who achieve Level 1 expert status in a module within 3 months of starting that module. For internal product, evidence, and investor reporting, this is paired with Expertise Conversion Rate (ECR) by module as the technical expression of conversion quality.
+        </Callout>
+        <Para>
+          ECR captures not only how many learners convert from novice to expert, but also how efficiently they do so — through lower cognitive load, faster completion, fewer attempts, and strong success rates. This aligns tightly with MoPT's mission to deliver accessible, affordable, and efficient clinical skills training, and positions MoPT as a Clinical Skills Intelligence Platform rather than a generic VR simulator.
+        </Para>
+        <BulletList
+          items={[
+            "Module-level ECR target: >80%.",
+            "ERR improvement per learner and per module: measurable reduction in procedural error rates over repeated sessions.",
+            "T2C improvement: reduction in average time required to reach competence benchmarks versus baseline or alternative training routes.",
+            "CLR improvement: evidence of lower cognitive burden as learners progress through a module.",
+            "Session completion rate: percentage of started sessions completed successfully.",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Competitive Landscape</p>
         <DataTable
           headers={["Competitor", "Core Focus", "MoPT Differentiation"]}
           rows={[
@@ -610,36 +598,24 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>North Star Metric & KPIs</p>
-        <Callout type="info">
-          <strong>North Star:</strong> Weekly Competency-Minutes per Active Learner â€” "Time in app" is vanity; "competency-minutes" weights active VR time by the score achieved, ensuring we measure effective learning.
-        </Callout>
-        <BulletList
-          items={[
-            "Input Metric 1 (Product UX): Time-to-Sim (seconds from headset on to scenario start).",
-            "Input Metric 2 (Clinical Value): AI Feedback Acceptance Rate (% of times a user corrects an action based on Chat MoPT).",
-            "Input Metric 3 (Institutional): Web Dashboard Weekly Active Instructors.",
-          ]}
-        />
-
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>18-Month Strategic Horizon</p>
         <BulletList
           items={[
-            "Phase 1 (Now â€“ 3mo): Beta with KCL. Prove the Unity-LMS-AI loop.",
-            "Phase 2 (3â€“9mo): Commercial NHS Pilots. Obtain DTAC compliance. Expand to 5 core neonatal scenarios.",
-            "Phase 3 (9â€“18mo): Multi-specialty expansion. Self-serve institutional purchasing. Internationalization prep.",
+            "Phase 1 (Now -“ 3mo): Beta with partner educational institutions. Prove the Unity-LMS-AI loop.",
+            "Phase 2 (3-“9mo): Commercial NHS Pilots. Obtain DTAC compliance. Expand to 5 core neonatal scenarios.",
+            "Phase 3 (9-“18mo): Multi-specialty expansion. Self-serve institutional purchasing. Internationalization prep.",
           ]}
         />
 
-        {/* â”€â”€â”€â”€â”€â”€ PART II â€” DISCOVERY â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-ii">Part II â€” Discovery & Validation</SectionHeading>
+        {/* -€-€-€-€-€-€ PART II -” DISCOVERY -€-€-€-€-€-€ */}
+        <SectionHeading id="part-ii">Part II -” Discovery & Validation</SectionHeading>
 
         <SubHeading id="sec-4">4. Discovery Framework & Continuous User Research Plan</SubHeading>
         <Para>We do not build features based on hunches. We utilize Teresa Torres' Continuous Discovery Habits framework (Opportunity Solution Trees) to map clinical pains to product solutions.</Para>
         <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Research Methods Mix</p>
         <BulletList
           items={[
-            "Contextual Inquiry: PM and VR Lead visiting KCL to watch clinicians use the VR headset in their natural environment.",
+            "Contextual Inquiry: PM and VR Lead visiting partner institutions to watch clinicians use the VR headset in their natural environment.",
             "Usability Testing: Meta Quest Casting to monitor UI struggles in real-time.",
             "Surveys: Automated SSQ (Simulator Sickness Questionnaire) sent post-module.",
           ]}
@@ -657,7 +633,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             "Miller's Pyramid: VR operates at the \"Shows How\" level. MoPT tests applied competence, bridging the gap between textbook knowledge (\"Knows\") and ward practice (\"Does\").",
             "Deliberate Practice: MoPT allows clinicians to repeatedly practice the exact 30-second window of a resuscitation where they are weakest, receiving immediate, targeted feedback.",
             "Cognitive Load Theory: The VR UI must minimize extraneous load (confusing menus) so the user's working memory is dedicated to germane load (solving the medical crisis).",
-            "Debriefing (PEARLS): Chat MoPT's post-scenario debrief will be structured on the PEARLS framework: Reactions â†’ Description â†’ Analysis â†’ Summary.",
+            "Debriefing (PEARLS): Chat MoPT's post-scenario debrief will be structured on the PEARLS framework: Reactions -’ Description -’ Analysis -’ Summary.",
           ]}
         />
 
@@ -666,8 +642,8 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
         <NumberedList
           items={[
             "SME Intake: Dr. Olayinka defines learning objectives and critical failure paths for a scenario.",
-            "Storyboard & Script: PM and Clinical Content Designer map the state machine (e.g., if user gives Adrenaline early â†’ trigger Chat MoPT warning).",
-            "VR Build: Oluwatosin implements the environmental assets and interaction logic.",
+            "Storyboard & Script: PM and Clinical Content Designer map the state machine (e.g., if user gives Adrenaline early -’ trigger Chat MoPT warning).",
+            "VR Build: VR/Tech Lead implements the environmental assets and interaction logic.",
             "Clinical Review: Prof. Olaosun reviews a recorded playthrough for medical fidelity.",
             "Release: Semantic versioning applied (e.g., NeoResus v1.2) to ensure historical student grades remain contextually accurate.",
           ]}
@@ -676,10 +652,10 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           <strong>Fidelity Tradeoffs:</strong> We prioritize Conceptual Fidelity (clinical logic) and Emotional Fidelity (stress, time pressure) over absolute Physical Fidelity (perfectly rendering the exact texture of skin).
         </Para>
 
-        {/* â”€â”€â”€â”€â”€â”€ PART III â€” PRDs â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-iii">Part III â€” Product Requirements Documents (PRDs)</SectionHeading>
+        {/* -€-€-€-€-€-€ PART III -” PRDs -€-€-€-€-€-€ */}
+        <SectionHeading id="part-iii">Part III -” Product Requirements Documents (PRDs)</SectionHeading>
 
-        <SubHeading id="sec-7">7. PRD â€” Unity VR Client</SubHeading>
+        <SubHeading id="sec-7">7. PRD -” Unity VR Client</SubHeading>
         <Para>Goal: Deliver a performant, clinically accurate, and intuitive VR presentation layer that interfaces seamlessly with the LMS and AI engines.</Para>
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Non-Functional Requirements</p>
@@ -724,18 +700,18 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <SubHeading id="sec-8">8. PRD â€” Web Client & Dashboards</SubHeading>
+        <SubHeading id="sec-8">8. PRD -” Web Client & Dashboards</SubHeading>
         <Para>Goal: Provide institutional buyers, instructors, and learners with a robust control center for managing accounts, modules, and performance analytics.</Para>
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Role Permissions Matrix</p>
         <DataTable
           headers={["Feature / Action", "Learner", "Instructor", "Inst. Admin", "Super Admin"]}
           rows={[
-            ["View own session data", "âœ”", "âœ”", "âœ”", "âœ”"],
-            ["View cohort analytics", "âœ–", "âœ”", "âœ”", "âœ”"],
-            ["Assign modules to users", "âœ–", "âœ”", "âœ”", "âœ”"],
-            ["Manage billing & seats", "âœ–", "âœ–", "âœ”", "âœ”"],
-            ["Edit clinical rubrics", "âœ–", "âœ–", "âœ–", "âœ”"],
+            ["View own session data", "-”", "-”", "-”", "-”"],
+            ["View cohort analytics", "-–", "-”", "-”", "-”"],
+            ["Assign modules to users", "-–", "-”", "-”", "-”"],
+            ["Manage billing & seats", "-–", "-–", "-”", "-”"],
+            ["Edit clinical rubrics", "-–", "-–", "-–", "-”"],
           ]}
         />
 
@@ -748,13 +724,13 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <SubHeading id="sec-9">9. PRD â€” LMS Integration & API Contract</SubHeading>
+        <SubHeading id="sec-9">9. PRD -” LMS Integration & API Contract</SubHeading>
         <CodeBlock>{`[Unity C# HttpClient]
-    â†“ (Bearer Token)
-[AWS API Gateway] â†’ Rate Limiter â†’ Auth Service
-    â†“
-[Node.js / LMS Backend] â†” [PostgreSQL DB]
-    â†“ (Async Webhook)
+    -“ (Bearer Token)
+[AWS API Gateway] -’ Rate Limiter -’ Auth Service
+    -“
+[Node.js / LMS Backend] -” [PostgreSQL DB]
+    -“ (Async Webhook)
 [Web Dashboard React App]`}</CodeBlock>
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Authentication: OAuth 2.0 Device Flow (RFC 8628)</p>
@@ -778,7 +754,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <SubHeading id="sec-10">10. PRD â€” Assessment Intelligence & Chat MoPT (Agentic AI)</SubHeading>
+        <SubHeading id="sec-10">10. PRD -” Assessment Intelligence & Chat MoPT (Agentic AI)</SubHeading>
         
         <Callout type="info">
           <strong>Core Product Truth:</strong> MoPT's defensible AI layer is not a generic chatbot. It is an assessment intelligence system that ingests Unity telemetry, evaluates learner actions against clinician-authored procedure logic, generates real-time judgment, and only then uses conversational AI as a delivery layer for feedback. Rule-based, clinician-validated judgment comes first; ML and LLMs are augmentation layers, not the source of truth.
@@ -795,7 +771,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
         <Para>
-          <span className="opacity-80 italic">The team's stated model-build estimate of ~1â€“2 weeks is realistic for a prototype but not for clinically credible production judgment. PM must therefore separate MVP assessor build time from clinical validation, telemetry QA, and replay verification time.</span>
+          <span className="opacity-80 italic">The team's stated model-build estimate of ~1-“2 weeks is realistic for a prototype but not for clinically credible production judgment. PM must therefore separate MVP assessor build time from clinical validation, telemetry QA, and replay verification time.</span>
         </Para>
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>10.2 Product Goal</p>
@@ -805,8 +781,8 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>10.3 Initial Clinical Testbeds</p>
         <BulletList items={[
-          "Primary: Endotracheal Intubation (ETI) â€” currently the most mature module context.",
-          "Secondary: IV Cannulation â€” next candidate for procedure graph and telemetry formalization.",
+          "Primary: Endotracheal Intubation (ETI) -” currently the most mature module context.",
+          "Secondary: IV Cannulation -” next candidate for procedure graph and telemetry formalization.",
         ]} />
         <Callout type="danger">
           <strong>Rule:</strong> No ML model is trained or benchmarked before the procedure graph and assessor rubric for each scenario are signed off by a medical advisor (Aladeojebi Adedotun Isaac).
@@ -882,8 +858,8 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           <strong>PM operating rule for AI/ML:</strong> Do not allow the team to hide ambiguity behind the word model. First pin down the procedure graph, telemetry ontology, assessor policy, and replay harness. Only then decide whether additional temporal ML is warranted.
         </Callout>
 
-        {/* â”€â”€â”€â”€â”€â”€ PART IV â€” REGULATORY â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-iv">Part IV â€” Regulatory, Safety & Trust</SectionHeading>
+        {/* -€-€-€-€-€-€ PART IV -” REGULATORY -€-€-€-€-€-€ */}
+        <SectionHeading id="part-iv">Part IV -” Regulatory, Safety & Trust</SectionHeading>
 
         <SubHeading id="sec-11">11. UK MedTech Regulatory Map</SubHeading>
         <Callout type="info">
@@ -926,8 +902,8 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           Transparency is key. Users must be explicitly informed when they are interacting with AI versus a human instructor. Bias reviews must be conducted on VR avatars to ensure diverse representation of virtual patients (ethnicity, gender, body type) to prevent diagnostic bias training.
         </Para>
 
-        {/* â”€â”€â”€â”€â”€â”€ PART V â€” EXECUTION â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-v">Part V â€” Execution System</SectionHeading>
+        {/* -€-€-€-€-€-€ PART V -” EXECUTION -€-€-€-€-€-€ */}
+        <SectionHeading id="part-v">Part V -” Execution System</SectionHeading>
 
         <SubHeading id="sec-15">15. Roadmap, OKRs & Prioritization</SubHeading>
         <Para>A world-class PM does not manage tasks. They manage outcomes.</Para>
@@ -937,37 +913,37 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           headers={["Objective", "Key Results", "Owner"]}
           rows={[
             ["O1. Earn the right to sell to the NHS", "KR1: Complete DPIA and DCB0129 Clinical Safety Case. KR2: Achieve Cyber Essentials Plus. KR3: Submit DTAC pack to 1 NHS Trust.", "PM + DPO + CSO"],
-            ["O2. Prove learning outcomes in a clinical cohort", "KR1: Run Private Beta with â‰¥20 KCL clinicians. KR2: â‰¥20% competency-score improvement (Kirkpatrick L2). KR3: Institutional NPS â‰¥40.", "PM + Clinical Lead"],
-            ["O3. Build a commercial, scalable platform", "KR1: Sign 2 paid institutional pilots (Â£5â€“15k ARR each). KR2: Unit gross margin â‰¥70%. KR3: Ship v1.0 scenario authoring pipeline.", "PM + COO"],
+            ["O2. Prove learning outcomes in a clinical cohort", "KR1: Run Private Beta with -¥20 clinicians from partner educational institutions. KR2: -¥20% competency-score improvement (Kirkpatrick L2). KR3: Institutional NPS -¥40.", "PM + Clinical Lead"],
+            ["O3. Build a commercial, scalable platform", "KR1: Sign 2 paid institutional pilots (£5-“15k ARR each). KR2: Unit gross margin -¥70%. KR3: Ship v1.0 scenario authoring pipeline.", "PM + COO"],
           ]}
         />
 
         <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Now / Next / Later Roadmap</p>
         <DataTable
-          headers={["Now (0â€“3 months)", "Next (3â€“6 months)", "Later (6â€“18 months)"]}
+          headers={["Now (0-“3 months)", "Next (3-“6 months)", "Later (6-“18 months)"]}
           rows={[
             [
-              "VR + LMS round-trip, Device Auth flow, Neonatal resus v1, Chat MoPT debrief, DPIA + Hazard Log, KCL Private Beta",
+              "VR + LMS round-trip, Device Auth flow, Neonatal resus v1, Chat MoPT debrief, DPIA + Hazard Log, Institutional Private Beta",
               "Instructor dashboards, Cohort analytics, Scenario authoring v1, 2nd + 3rd modules, SSO for institutions, Self-serve billing",
               "Multi-specialty library, International (Nigeria, UAE), Pico/Vision Pro support, Peer-reviewed study, ISO 27001, Scenario marketplace",
             ],
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Sprint Plan to Beta (Sprints 1â€“5)</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Sprint Plan to Beta (Sprints 1-“5)</p>
         <DataTable
           headers={["Sprint", "Theme", "Primary Deliverables", "Exit Criteria"]}
           rows={[
-            ["1 (Wk 1â€“2)", "Foundation", "API contracts locked; Device Auth live; Spatial UI shell; LMS audit; DPIA kicked off.", "Clinician can pair headset with web and load dummy Platform menu."],
-            ["2 (Wk 3â€“4)", "Core Simulation", "Neonatal resus scene; Scoring rubric; Session schema; /sessions endpoint.", "Module playable locally; 200 OK on session POST via Postman."],
-            ["3 (Wk 5â€“6)", "Integration + AI", "Round-trip data (VR â†’ LMS â†’ Dashboard); Chat MoPT RAG baseline; Individual learner view.", "Completed module in VR appears on web within 5s; Chat MoPT functional."],
-            ["4 (Wk 7â€“8)", "Hardening", "72 FPS guarantee; haptics; accessibility; edge cases; offline cache; feature flags; Clinical Safety Case draft.", "OVR metrics green; app recovers from Wi-Fi drop; CSO approves."],
-            ["5 (Wk 9â€“10)", "Beta Readiness", "QA sweep; GDPR walkthrough; train-the-trainer kit; KCL onboarding docs; App Lab Beta channel push.", "Zero S1/S2; DPIA signed; KCL accounts provisioned."],
+            ["1 (Wk 1-“2)", "Foundation", "API contracts locked; Device Auth live; Spatial UI shell; LMS audit; DPIA kicked off.", "Clinician can pair headset with web and load dummy Platform menu."],
+            ["2 (Wk 3-“4)", "Core Simulation", "Neonatal resus scene; Scoring rubric; Session schema; /sessions endpoint.", "Module playable locally; 200 OK on session POST via Postman."],
+            ["3 (Wk 5-“6)", "Integration + AI", "Round-trip data (VR -’ LMS -’ Dashboard); Chat MoPT RAG baseline; Individual learner view.", "Completed module in VR appears on web within 5s; Chat MoPT functional."],
+            ["4 (Wk 7-“8)", "Hardening", "72 FPS guarantee; haptics; accessibility; edge cases; offline cache; feature flags; Clinical Safety Case draft.", "OVR metrics green; app recovers from Wi-Fi drop; CSO approves."],
+            ["5 (Wk 9-“10)", "Beta Readiness", "QA sweep; GDPR walkthrough; train-the-trainer kit; institutional onboarding docs; App Lab Beta channel push.", "Zero S1/S2; DPIA signed; institutional accounts provisioned."],
           ]}
         />
 
         <Callout type="info">
-          <strong>PM Recommendation:</strong> Lock the top 10 P0 items for Sprints 1â€“3. Every other item must earn its way into a sprint by passing Definition of Ready AND showing no dependency on an unfinished P0.
+          <strong>PM Recommendation:</strong> Lock the top 10 P0 items for Sprints 1-“3. Every other item must earn its way into a sprint by passing Definition of Ready AND showing no dependency on an unfinished P0.
         </Callout>
 
         <SubHeading id="sec-16">16. Iteration System & Engineering Operating Model</SubHeading>
@@ -993,7 +969,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           headers={["Surface", "Definition of Done"]}
           rows={[
             ["VR / Unity", "PR reviewed; automated PlayMode test added; manual device test passed on Quest 3; 72 FPS sustained; analytics firing; ADR updated; clinical sign-off for scenario changes."],
-            ["Web", "PR reviewed; unit + integration test coverage â‰¥70%; Playwright E2E passes; a11y scan (axe) green; Lighthouse â‰¥90; Storybook updated."],
+            ["Web", "PR reviewed; unit + integration test coverage -¥70%; Playwright E2E passes; a11y scan (axe) green; Lighthouse -¥90; Storybook updated."],
             ["API / Integration", "Swagger updated; Postman regression pass; contract test green; security headers verified; logged and traced; idempotency verified; rollback path documented."],
             ["Chat MoPT / AI", "Prompt version tagged; eval harness run (faithfulness + clinical accuracy); cost per call logged; guardrail tests pass; clinical reviewer signs off."],
           ]}
@@ -1030,15 +1006,15 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           <strong>Beta Gate: QA Exit Criteria:</strong> Zero S1/S2; &lt;3 S3; performance regressions closed; a11y scans green; UAT sign-off by CSO; evidence bundle attached to Sprint 5 release PR.
         </Callout>
 
-        {/* â”€â”€â”€â”€â”€â”€ PART VI â€” GTM â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-vi">Part VI â€” Go-to-Market</SectionHeading>
+        {/* -€-€-€-€-€-€ PART VI -” GTM -€-€-€-€-€-€ */}
+        <SectionHeading id="part-vi">Part VI -” Go-to-Market</SectionHeading>
 
         <SubHeading id="sec-19">19. Beta Program Design</SubHeading>
         <DataTable
           headers={["Phase", "Duration", "Cohort", "Objective", "Exit Criteria"]}
           rows={[
             ["Closed Alpha", "2 weeks", "MoPT team + 4 advisors", "Validate core loop; kill S1/S2 bugs", "0 S1/S2; 72 FPS sustained"],
-            ["Private Beta", "6 weeks", "15â€“20 KCL clinicians + 2 educators", "Validate clinical accuracy, learning outcomes", "â‰¥80% completion; NPS â‰¥40; â‰¥20% L2 improvement"],
+            ["Private Beta", "6 weeks", "15-“20 clinicians from partner educational institutions + 2 educators", "Validate clinical accuracy, learning outcomes", "-¥80% completion; NPS -¥40; -¥20% L2 improvement"],
             ["Open Beta", "8 weeks", "Waitlist + 2 NHS trusts", "Scalability, conversion to paid", "<1% crash rate; 2 paid pilots signed"],
           ]}
         />
@@ -1055,7 +1031,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
         />
 
         <Callout type="danger">
-          <strong>Private Beta Go/No-Go Gate:</strong> 1) DPIA signed. 2) Clinical Safety Case approved by CSO. 3) 0 S1/S2. 4) 72 FPS verified. 5) E2E round-trip verified over 50 simulated sessions. 6) KCL Data Sharing Agreement executed. 7) Rollback and kill-switch tested.
+          <strong>Private Beta Go/No-Go Gate:</strong> 1) DPIA signed. 2) Clinical Safety Case approved by CSO. 3) 0 S1/S2. 4) 72 FPS verified. 5) E2E round-trip verified over 50 simulated sessions. 6) Institutional Data Sharing Agreement executed. 7) Rollback and kill-switch tested.
         </Callout>
 
         <SubHeading id="sec-20">20. Institutional Sales & Procurement</SubHeading>
@@ -1076,55 +1052,46 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <SubHeading id="sec-21">21. Pricing, Packaging & Unit Economics</SubHeading>
-        <DataTable
-          headers={["Plan", "Price (monthly)", "Entitlement"]}
-          rows={[
-            ["Standard", "Â£21", "Unlimited VR sessions, core modules, Chat MoPT limited (N queries/day), basic dashboard."],
-            ["Premium", "Â£31", "All scenario bundles, unlimited Chat MoPT, certificate of completion, priority support."],
-            ["Institution", "Custom", "SSO, admin panel, cohort analytics, dedicated CSM, DPA, SLA, training."],
-          ]}
-        />
-
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Unit Economics Model</p>
-        <DataTable
-          headers={["Line", "Standard (Â£21/mo)", "Premium (Â£31/mo)"]}
-          rows={[
-            ["Revenue", "Â£21.00", "Â£31.00"],
-            ["Payment processing (~2.5%)", "-Â£0.53", "-Â£0.78"],
-            ["LLM / Chat MoPT tokens", "-Â£1.20", "-Â£3.50"],
-            ["Cloud + bandwidth", "-Â£0.60", "-Â£0.90"],
-            ["Support allocation", "-Â£0.80", "-Â£1.20"],
-            ["Gross margin", "~Â£17.87 (85%)", "~Â£24.62 (79%)"],
-          ]}
-        />
 
         <SubHeading id="sec-22">22. Customer Success, Hardware Logistics & Support</SubHeading>
         <DataTable
           headers={["Step", "Who", "Outcome", "Timing"]}
           rows={[
             ["Kickoff call", "PM + COO + institution admin", "Success plan signed; champion identified", "Day 0"],
-            ["Hardware shipment", "COO + hardware partner", "Headsets delivered + MDM enrolled", "Day 1â€“7"],
+            ["Hardware shipment", "COO + hardware partner", "Headsets delivered + MDM enrolled", "Day 1-“7"],
             ["Train-the-trainer", "PM + Clinical Lead", "2-hour session; certified institutional trainer", "Day 7"],
-            ["Learner activation", "Instructor + CSM", "70% of learners complete first module in 14 days", "Day 7â€“21"],
+            ["Learner activation", "Instructor + CSM", "70% of learners complete first module in 14 days", "Day 7-“21"],
             ["First QBR", "PM + institution admin", "Outcome review; expansion plan", "Day 90"],
           ]}
         />
 
-        {/* â”€â”€â”€â”€â”€â”€ PART VII â€” TEAM â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-vii">Part VII â€” Team & Stakeholders</SectionHeading>
+        {/* -€-€-€-€-€-€ PART VII -” TEAM -€-€-€-€-€-€ */}
+        <SectionHeading id="part-vii">Part VII -” Team & Stakeholders</SectionHeading>
 
         <SubHeading id="sec-23">23. Stakeholder Map, RACI & Communication System</SubHeading>
         <DataTable
-          headers={["Group", "Stakeholders", "Interest", "Influence", "PM Engagement"]}
+          headers={["Function", "Role", "Status", "RACI Scope"]}
           rows={[
-            ["Founders", "Dr. Olayinka (CEO), Adetola (CFO/COO)", "Very high", "Very high", "Weekly 1:1s + Friday status"],
-            ["Tech leads", "Dr. Tara (VR), Joshua (AI/Web)", "Very high", "High", "Daily async + weekly syncs"],
-            ["Implementers", "Oluwatosin (Unity)", "Very high", "High", "Daily + weekly 1:1 + in-headset pairing"],
-            ["Clinical", "Prof. Olaosun, external SMEs", "High", "Medium", "Bi-weekly CAB"],
-            ["Advisors", "Dr. Janice, Gigi, Ayokunnu, Graham", "Medium", "Medium", "Monthly input via PM funnel"],
-            ["External", "KCL, NHS trust champions, Meta", "High", "Medium", "Weekly during pilot"],
-            ["Regulators", "ICO, MHRA, NHS Digital", "Lowâ€“Medium", "Very high (latent)", "Proactive posture"],
+            ["CEO", "Chief Executive Officer", "In place", "Accountable for company strategy and clinical vision"],
+            ["CTO", "Chief Technology Officer", "In place", "Accountable for all technology and product development"],
+            ["CFOO", "Chief Financial and Operating Officer", "In place", "Accountable for finance, operations, and commercial"],
+            ["Clinical Education Lead", "Clinical Education Lead", "In place", "Accountable for clinical content and education strategy"],
+            ["VR Development Lead", "VR Development Lead", "In place", "Responsible for VR product and Unity development"],
+            ["Research Lead", "Research Lead", "Future", "Responsible for research strategy, data analysis, and evidence"],
+            ["Software Engineer", "Software Engineer", "Future", "Responsible for UX/UI, QA/Test, and haptic engineering"],
+            ["AI/ML Engineer", "AI/ML Engineer", "In place", "Responsible for AI model development and integration"],
+            ["Regulatory/Compliance Lead", "Regulatory/Compliance Lead", "In place", "Responsible for DTAC, DPIA, and regulatory compliance"],
+            ["EA/Project Manager", "EA/Project Manager", "In place", "Responsible for project coordination and stakeholder management"],
+            ["Accountant", "Accountant", "In place", "Informed on financial reporting and budgeting"],
+            ["Clinical Specialist", "Clinical Specialist", "Future", "Consulted on clinical content accuracy and validation"],
+            ["VR (Technical Product and Innovation) Developer", "VR Developer", "Future", "Responsible for VR technical innovation and builds"],
+            ["Data Analyst", "Data Analyst", "Future", "Responsible for analytics, reporting, and data insights"],
+            ["3D Animator", "3D Animator", "Future", "Responsible for VR environment and asset creation"],
+            ["UX/UI Designer", "UX/UI Designer", "Future", "Responsible for user experience and interface design"],
+            ["QA/Test Engineer", "QA/Test Engineer", "Future", "Responsible for test architecture and quality assurance"],
+            ["Haptic Engineer", "Haptic Engineer", "Future", "Responsible for haptic feedback design and implementation"],
+            ["Marketing", "Marketing", "Future", "Responsible for brand, content, and growth marketing"],
+            ["Customer Service", "Customer Service", "Future", "Responsible for user support and satisfaction"],
           ]}
         />
 
@@ -1135,7 +1102,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             "PM arbitrates within 24h.",
             "PM + functional lead resolve within 48h.",
             "Escalate to CEO/COO for trade-off requiring budget, scope, or strategic change.",
-            "Board-level only if regulatory, reputational, or >Â£25k cost implication.",
+            "Board-level only if regulatory, reputational, or >£25k cost implication.",
           ]}
         />
 
@@ -1159,38 +1126,13 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           </div>
         </div>
 
-        <SubHeading id="sec-25">25. Hiring & Team Scaling Plan</SubHeading>
-        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Current Team Assessment</p>
-        <DataTable
-          headers={["Role", "Coverage", "Risk"]}
-          rows={[
-            ["Unity / VR", "Oluwatosin solo", "High â€” key person dependency"],
-            ["AI / Backend / Web", "Joshua solo", "High â€” key person dependency"],
-            ["VR academic / UX", "Dr. Tara (part-time)", "Medium â€” capacity-bound"],
-            ["Clinical content", "Dr. Olayinka + Prof. Olaosun", "High â€” founders own too much content"],
-            ["QA", "Distributed informally", "High â€” no dedicated owner"],
-            ["Customer success / sales", "Adetola (part)", "Medium"],
-          ]}
-        />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Next 6 Hires (recommended sequence)</p>
-        <NumberedList
-          items={[
-            "Clinical Content Designer â€” offloads scenario authoring from founders. Hire by end of Q2.",
-            "QA / XR Test Engineer â€” owns test architecture + manual exploratory VR testing. Hire by Sprint 6.",
-            "Senior Backend / Platform Engineer â€” reduces Joshua's SPOF; owns SRE, security, observability. Hire by Q3.",
-            "Customer Success Manager â€” owns institutional onboarding and QBRs. Hire when 3rd pilot signs.",
-            "Second Unity Developer â€” reduces Oluwatosin SPOF; enables parallel scenario work. Hire by Q4.",
-            "DPO / Compliance Lead (can be fractional/outsourced initially) â€” owns DPIA, ROPA, DTAC, DSPT.",
-          ]}
-        />
-
-        {/* â”€â”€â”€â”€â”€â”€ PART VIII â€” ANALYTICS â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-viii">Part VIII â€” Analytics, KPIs & Learning</SectionHeading>
+        {/* -€-€-€-€-€-€ PART VIII -” ANALYTICS -€-€-€-€-€-€ */}
+        <SectionHeading id="part-viii">Part VIII -” Analytics, KPIs & Learning</SectionHeading>
 
         <SubHeading id="sec-26">26. Analytics & Data Infrastructure</SubHeading>
         <Para>
-          <strong>Recommended Stack:</strong> Unity telemetry â†’ Segment (or Rudderstack) â†’ Postgres (UK) â†’ dbt transformations â†’ Metabase for internal BI + Mixpanel for product analytics.
+          <strong>Recommended Stack:</strong> Unity telemetry -’ Segment (or Rudderstack) -’ Postgres (UK) -’ dbt transformations -’ Metabase for internal BI + Mixpanel for product analytics.
         </Para>
         <BulletList
           items={[
@@ -1201,38 +1143,111 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <SubHeading id="sec-27">27. KPI Operating Model & Learning Outcomes</SubHeading>
+        <SubHeading id="sec-27">27. KPI Operating Model & North Star Metrics</SubHeading>
         <Callout type="info">
-          <strong>Proposed North Star:</strong> Weekly Competency-Minutes per Active Learner (W-CM/AL) â€” the sum of VR minutes weighted by competency gain, averaged across active learners per week. It forces the team to optimize learning-effective time-in-VR.
+          <strong>North Star Metric — Competence Development:</strong> Percentage of active learners who achieve Level 1 expert status in a module within 3 months of starting that module. Expressed operationally through module-level Expertise Conversion Rate (ECR), which captures not only how many learners convert, but also how efficiently they do so — through lower cognitive load, faster completion, fewer attempts, and strong success rates.
         </Callout>
+        <Para>
+          This North Star aligns with MoPT's mission to deliver accessible, affordable, and efficient clinical skills training, and with its positioning as a Clinical Skills Intelligence Platform. It directly reflects learning impact, supports institutional adoption by proving competence uplift, and strengthens MoPT's evidence moat by linking training activity to measurable skill acquisition.
+        </Para>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Key KPIs</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Product & Learning KPIs</p>
         <DataTable
-          headers={["Metric", "Definition", "Owner", "Target", "Alert"]}
+          headers={["Metric", "Definition", "Target"]}
           rows={[
-            ["W-CM/AL", "Î£(session minutes Ã— competency delta) / active learners (week)", "PM", "â‰¥45 min/learner/wk", "<20"],
-            ["Activation rate", "% of new learners completing 1 module within 7d", "PM", "â‰¥60%", "<40%"],
-            ["Session completion", "Sessions completed / sessions started", "PM", "â‰¥85%", "<70%"],
-            ["FPS stability", "% session time at â‰¥72 FPS", "Oluwatosin", "â‰¥99%", "<95%"],
-            ["Crash rate", "Crashes / sessions", "AI/Web Lead", "<1%", ">2%"],
-            ["API p95 latency", "p95 response time", "AI/Web Lead", "<500 ms", ">1 s"],
-            ["Chat MoPT TTFT", "Time-to-first-token", "AI/Web Lead", "<2 s", ">4 s"],
-            ["SSQ delta", "Post â€“ Pre Simulator Sickness score", "VR Lead", "<5", ">10"],
-            ["Learner NPS", "Standard NPS on 3rd module", "PM", "â‰¥40", "<20"],
-            ["ARR", "Contracted annual recurring revenue", "COO", "Plan-defined", "Miss >10%"],
-            ["Gross margin", "(Revenue âˆ’ COGS) / Revenue", "COO", "â‰¥75%", "<65%"],
-            ["Sprint say-do", "Points done / points committed", "PM", "â‰¥80%", "<60%"],
+            ["Module-level ECR", "% of learners converting from novice to Level 1 expert per module", ">80%"],
+            ["Error Reduction Rate (ERR)", "Measurable reduction in procedural error rates over repeated sessions", "Improvement per learner/module"],
+            ["Time-to-Competence (T2C)", "Average time to reach competence benchmarks vs baseline or alternatives", "Reduction trend"],
+            ["Cognitive Load Reduction (CLR)", "Evidence of lower cognitive burden as learners progress", "Improvement trend"],
+            ["Session completion rate", "% of started sessions completed successfully", "≥85%"],
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Kirkpatrick Four-Level Mapping</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Technical & Platform KPIs</p>
         <DataTable
-          headers={["Level", "What We Measure", "How", "When"]}
+          headers={["Metric", "Definition", "Target"]}
           rows={[
-            ["L1 â€” Reaction", "Satisfaction, presence, comfort", "NPS, CSAT, SSQ, IPQ short-form", "After every session"],
-            ["L2 â€” Learning", "Knowledge & procedural competence", "Pre/post-sim scores, critical-error count, time-to-decision", "Per module"],
-            ["L3 â€” Behavior", "Transfer to clinical practice", "Instructor observation scales, 360Â° feedback, OSCE deltas", "3â€“6 months post-training"],
-            ["L4 â€” Results", "Patient & system outcomes", "Partner trust outcome data (adherence to protocol, incident rates)", "12+ months (aspirational)"],
+            ["AI feedback latency", "Real-time feedback for critical errors, supporting in-step corrective instruction", "<2s"],
+            ["Computer vision accuracy", "Hand/tool detection and action recognition at clinically useful thresholds", "≥95%"],
+            ["System uptime / availability", "High SaaS reliability for institutional use and repeat engagement", "≥99.5%"],
+            ["Glitch-free session rate", "% of sessions completed without technical interruption", "≥95%"],
+            ["FPS stability", "% session time at ≥72 FPS on Quest 3", "≥99%"],
+            ["API p95 latency", "p95 response time", "<500ms"],
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Evidence & Validation KPIs</p>
+        <BulletList
+          items={[
+            "Number of pilot studies initiated and completed per year.",
+            "Conference abstracts submitted / accepted per year.",
+            "Peer-reviewed manuscripts submitted / published per year.",
+            "Validated correlation between MoPT performance metrics and OSCE or supervised real-world performance per institution.",
+            "Institutional Evidence Dossier updates based on new pilot and publication outputs.",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Commercial & Growth KPIs</p>
+        <DataTable
+          headers={["Metric", "Definition", "Target"]}
+          rows={[
+            ["Active subscribers", "Number of active subscribers and institutions", "Growth trend"],
+            ["Monthly subscriber growth rate", "Month-over-month subscriber growth", "Positive trend"],
+            ["Module add-on rate", "% of customers adding additional modules within 6 months", "Growth trend"],
+            ["Net Revenue Retention (NRR)", "Revenue retained and expanded from existing customers", ">110%"],
+            ["Gross margin", "Revenue minus cost of goods sold", "~70%"],
+            ["CAC payback & Rule of 40", "Disciplined acquisition cost recovery in rewarded zone", "Rule of 40 compliant"],
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Data Moat KPIs</p>
+        <BulletList
+          items={[
+            "Total number of procedural simulations completed across the platform.",
+            "Number of learners with longitudinal data across 10+ sessions.",
+            "Number of institutions contributing benchmarkable data / federated learning inputs.",
+            "Number of expert trajectories captured per procedure.",
+            "Cross-institution benchmarking usage through MoPT Insights API.",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Leading Indicators — Engagement</p>
+        <BulletList
+          items={[
+            "% of new subscribers completing at least 5 sessions within the first month.",
+            "Average number of completed sessions per active learner per month.",
+            "Median session duration by module.",
+            "% of learners returning for a second session within 7 days of first use (early habit formation).",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Leading Indicators — Learning Progress</p>
+        <BulletList
+          items={[
+            "Performance Progress Indicator: % improvement in module score, ERR, or step accuracy across sessions.",
+            "Average number of AI-prompted iterations per session, interpreted alongside outcome improvement.",
+            "Time-to-Competence (T2C) trend by module.",
+            "Cognitive Load Reduction (CLR) trend, using completion efficiency and validated physiological measures where available.",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Leading Indicators — Experience & Functionality</p>
+        <BulletList
+          items={[
+            "% of sessions rated 4/4 by users at session end.",
+            "% of learners who complete at least 5 sessions in a module without technical glitches within 1 month.",
+            "Technical success rate per session, including crash-free completion and stable interaction performance.",
+            "AI feedback usefulness score: whether learners perceive real-time prompts as relevant and helpful.",
+          ]}
+        />
+
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Leading Indicators — Reliability, Reputation & Growth</p>
+        <BulletList
+          items={[
+            "Number of new secondary subscribers per institution after initial launch.",
+            "Institutional expansion rate: growth in active users after the first institutional launch cohort.",
+            "% of customers adding additional modules within 6 months.",
+            "Advocacy / recommendation rate: user confidence and word-of-mouth.",
           ]}
         />
 
@@ -1247,21 +1262,21 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        {/* â”€â”€â”€â”€â”€â”€ PART IX â€” RISK â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-ix">Part IX â€” Risk, Crisis & Governance</SectionHeading>
+        {/* -€-€-€-€-€-€ PART IX -” RISK -€-€-€-€-€-€ */}
+        <SectionHeading id="part-ix">Part IX -” Risk, Crisis & Governance</SectionHeading>
 
         <SubHeading id="sec-29">29. Risk Register & Contingency Plans</SubHeading>
         <DataTable
           headers={["ID", "Category", "Risk", "P", "I", "Score", "Owner"]}
           rows={[
-            ["R01", "Technical", "VR drops below 72 FPS", "M", "H", "12", "Oluwatosin"],
-            ["R02", "Technical", "Wi-Fi loss mid-session â€” data loss", "H", "H", "16", "AI/Web Lead"],
+            ["R01", "Technical", "VR drops below 72 FPS", "M", "H", "12", "VR/Tech Lead"],
+            ["R02", "Technical", "Wi-Fi loss mid-session -” data loss", "H", "H", "16", "AI/Web Lead"],
             ["R03", "Product/Clinical", "Chat MoPT hallucinates clinical advice", "M", "C", "15", "AI/Web Lead + CSO"],
             ["R04", "Regulatory", "NHS buyer requires DTAC, we aren't ready", "H", "H", "16", "PM + DPO"],
             ["R05", "Data/Security", "PII breach", "L", "C", "10", "DPO"],
             ["R06", "Compliance", "GDPR complaint from user", "L", "H", "8", "DPO"],
             ["R07", "Clinical Safety", "Scenario teaches incorrect protocol", "L", "C", "10", "CSO"],
-            ["R08", "Team", "Key-person dependency on Oluwatosin", "H", "H", "16", "COO"],
+            ["R08", "Team", "Key-person dependency on VR/Tech Lead", "H", "H", "16", "COO"],
             ["R09", "Team", "AI/Web SPOF on Joshua", "M", "H", "12", "COO"],
             ["R10", "Commercial", "No institutional pilot signs", "M", "H", "12", "CEO + PM"],
             ["R11", "Market", "Competitor launches agentic AI first", "M", "M", "9", "PM"],
@@ -1302,7 +1317,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
             ["First 60 minutes", "Declare incident; Incident Commander named; containment (revoke keys, rotate secrets, isolate systems); forensics preserved.", "DPO + AI/Web Lead"],
             ["First 24 hours", "Scope determined; legal engaged (Graham); internal comms; prepare external comms.", "DPO + CEO"],
             ["Within 72 hours", "ICO notification if likely to result in risk to rights and freedoms; affected user comms; status page update.", "DPO"],
-            ["Week 1â€“2", "Remediation deploy; blameless post-mortem; regulator follow-up; customer QBR.", "PM + DPO"],
+            ["Week 1-“2", "Remediation deploy; blameless post-mortem; regulator follow-up; customer QBR.", "PM + DPO"],
           ]}
         />
 
@@ -1318,7 +1333,7 @@ export default function DocumentationPage({ data }: DocumentationPageProps) {
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--danger)" }}>30.3â€“30.7 Additional Playbooks</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--danger)" }}>30.3-“30.7 Additional Playbooks</p>
         <BulletList
           items={[
             "Clinician Injury or Severe Cybersickness: Institution's instructor follows in-person first response. Incident reported within 24h to CSO. Hazard log updated.",
@@ -1358,39 +1373,39 @@ Reversibility: Type 2 (reversible).`}</CodeBlock>
           ]}
         />
 
-        {/* â”€â”€â”€â”€â”€â”€ PART X â€” PERSONAL EXCELLENCE â”€â”€â”€â”€â”€â”€ */}
-        <SectionHeading id="part-x">Part X â€” Personal Excellence & Appendices</SectionHeading>
+        {/* -€-€-€-€-€-€ PART X -” PERSONAL EXCELLENCE -€-€-€-€-€-€ */}
+        <SectionHeading id="part-x">Part X -” Team Self-Check & Appendices</SectionHeading>
 
-        <SubHeading id="sec-32">32. Personal Excellence, Growth & Anti-Patterns</SubHeading>
-        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Weekly Self-Assessment Checklist</p>
+        <SubHeading id="sec-32">32. Team Self-Check, Growth & Anti-Patterns</SubHeading>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Weekly Team Self-Check</p>
         <BulletList
           items={[
-            "Did I proactively unblock Oluwatosin and Joshua, or did I become a bottleneck?",
+            "Did we proactively unblock engineering, or did we become a bottleneck?",
             "Are the next two sprints' tickets 100% DoR-compliant?",
-            "Did I spend time with at least one real clinician this week?",
-            "Did I review telemetry and learning outcome data, not just feature progress?",
-            'Did I say a firm, kind "no" to a scope creep request?',
-            "Did I translate founder intent into testable outcomes?",
-            "Did I shield engineering from advisor noise while still extracting advisor value?",
-            "Did I update the risk register and decision log for anything material?",
-            "Did I check the guardrail metrics (crash, SSQ, AI refusal, ticket volume)?",
-            "Did I ship one thing that made the team's operating system measurably better?",
-            "Did I close the loop with a beta participant who gave feedback last week?",
-            "Did I make progress on my own skill plan (clinical, XR, AI, regulatory)?",
-            "Did I give specific, actionable praise to at least one teammate?",
-            "Did I write less, decide more, and talk to more humans?",
-            "Am I still optimizing for long-term trust with clinicians over short-term velocity?",
+            "Did we spend time with at least one real clinician this week?",
+            "Did we review telemetry and learning outcome data, not just feature progress?",
+            'Did we say a firm, kind "no" to a scope creep request?',
+            "Did we translate founder intent into testable outcomes?",
+            "Did we shield engineering from advisor noise while still extracting advisor value?",
+            "Did we update the risk register and decision log for anything material?",
+            "Did we check the guardrail metrics (crash, SSQ, AI refusal, ticket volume)?",
+            "Did we ship one thing that made the team's operating system measurably better?",
+            "Did we close the loop with a beta participant who gave feedback last week?",
+            "Did we make progress on our skill development plan (clinical, XR, AI, regulatory)?",
+            "Did we give specific, actionable praise to at least one teammate?",
+            "Did we write less, decide more, and talk to more humans?",
+            "Are we still optimizing for long-term trust with clinicians over short-term velocity?",
           ]}
         />
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Skill Development Plan</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Team Skill Development Plan</p>
         <DataTable
-          headers={["Domain", "Why It Matters", "How I'll Build It"]}
+          headers={["Domain", "Why It Matters", "How We Build It"]}
           rows={[
-            ["Clinical literacy", "Speak the users' language; earn clinician trust", "Shadow KCL neonatal ward; complete NHS e-learning on resus; monthly reading list curated by CAB"],
+            ["Clinical literacy", "Speak the users' language; earn clinician trust", "Shadow partner institution neonatal ward; complete NHS e-learning on resus; monthly reading list curated by CAB"],
             ["XR UX", "Design decisions in VR are physical, not visual", "Meta Quest UI guidelines; XR Access; hands-on testing 1h/week; Tara mentorship"],
             ["AI / LLM systems", "Chat MoPT is core differentiator", "RAG patterns; LLM evals (Arize, Weights & Biases); AI safety reading"],
-            ["Data analytics", "PM owns tracking plan and metric integrity", "SQL proficiency in Postgres; Metabase dashboards I build myself"],
+            ["Data analytics", "PM owns tracking plan and metric integrity", "SQL proficiency in Postgres; Metabase dashboards we build ourselves"],
             ["UK MedTech regulatory", "Unlocks NHS revenue", "MHRA guidance; DCB0129/0160; DTAC; NHS Digital playbook"],
             ["Commercial fluency", "Bridge product and revenue", "Pairing with Ayokunnu on unit economics; SaaS pricing literature"],
           ]}
@@ -1422,13 +1437,13 @@ Reversibility: Type 2 (reversible).`}</CodeBlock>
           ]}
         />
         <Para>
-          <strong>Dependency Map (headline):</strong> Int-2 (API spec) â†’ Web-6, Web-8, VR-24, Int-4, Int-5. Int-3 (Auth) â†’ Web-3, Int-6. VR-5 (session schema) â†’ VR-24 â†’ Web-6 â†’ Web-9/10/11. Web-13 (DPIA/GDPR) gates all beta launch. VR-27 (clinical review) gates VR-13 (neonatal module) before beta.
+          <strong>Dependency Map (headline):</strong> Int-2 (API spec) -’ Web-6, Web-8, VR-24, Int-4, Int-5. Int-3 (Auth) -’ Web-3, Int-6. VR-5 (session schema) -’ VR-24 -’ Web-6 -’ Web-9/10/11. Web-13 (DPIA/GDPR) gates all beta launch. VR-27 (clinical review) gates VR-13 (neonatal module) before beta.
         </Para>
 
-        {/* â”€â”€â”€â”€â”€â”€ APPENDICES â”€â”€â”€â”€â”€â”€ */}
+        {/* -€-€-€-€-€-€ APPENDICES -€-€-€-€-€-€ */}
         <SectionHeading id="appendices">Appendices & Glossary</SectionHeading>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Appendix A â€” PRD Template (Short-Form)</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--primary)" }}>Appendix A -” PRD Template (Short-Form)</p>
         <CodeBlock>{`# PRD: [Feature name]
 Author: PM | Date: YYYY-MM-DD | Status: Draft|Ready|Shipped
 
@@ -1443,7 +1458,7 @@ Author: PM | Date: YYYY-MM-DD | Status: Draft|Ready|Shipped
 9. Rollout plan & feature flag
 10. Out of scope`}</CodeBlock>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix B â€” VR Feature Spec Template</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix B -” VR Feature Spec Template</p>
         <CodeBlock>{`## VR Feature Spec: [name]
 Screen(s): [Splash|Welcome|Dashboard|Platform|Modules|...]
 Input: controller / voice / gaze
@@ -1456,7 +1471,7 @@ Accessibility: subtitle, left-hand, seated, colour-blind
 Failure modes: HMD off, Wi-Fi drop, timeout, input error
 Acceptance: bullet list`}</CodeBlock>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix C â€” ADR Template</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix C -” ADR Template</p>
         <CodeBlock>{`# ADR-XXXX: [Title]
 Status: Proposed | Accepted | Superseded
 Context: what forces us to decide?
@@ -1466,7 +1481,7 @@ Alternatives: options considered.
 Reversibility: Type 1 (one-way) | Type 2 (reversible).
 Reviewers: who signed off.`}</CodeBlock>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix D â€” Experiment Template</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix D -” Experiment Template</p>
         <CodeBlock>{`Hypothesis:
 Primary metric + direction + MDE:
 Guardrail metrics:
@@ -1476,7 +1491,7 @@ Ethics / consent:
 Rollback:
 Decision after run: ship | iterate | kill`}</CodeBlock>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix E â€” Post-Mortem Template</p>
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix E -” Post-Mortem Template</p>
         <CodeBlock>{`Incident: [one-line summary]
 Severity: S1 | S2 | S3
 Timeline (UTC):
@@ -1491,8 +1506,8 @@ What went wrong:
 Action items (owner, due, ticket):
 Customer / regulator communication:`}</CodeBlock>
 
-        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix F â€” Weekly Status Report Template</p>
-        <CodeBlock>{`Subject: MoPT Product Sync â€” Sprint [X], Week [Y]
+        <p className="text-xs font-bold uppercase tracking-wider mb-3 mt-6" style={{ color: "var(--primary)" }}>Appendix F -” Weekly Status Report Template</p>
+        <CodeBlock>{`Subject: MoPT Product Sync -” Sprint [X], Week [Y]
 Health: [Green | Yellow | Red]
 North Star this week: W-CM/AL = [value], vs target [target]
 
@@ -1534,7 +1549,7 @@ Metrics snapshot:
         {/* End Marker */}
         <div className="glass p-6 mt-12 text-center" style={{ borderTop: "4px solid var(--primary)" }}>
           <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "var(--primary)" }}>
-            End of Document â€” Version 2.0
+            End of Document -” Version 2.0
           </p>
           <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>
             This Master Execution Pack v2.0 is the operating system for a world-class PM running MoPT. It is a living document. Review quarterly; update whenever a decision, risk, or metric changes materially.
