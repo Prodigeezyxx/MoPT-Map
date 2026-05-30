@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { LayoutDashboard, ListTodo, Map, AlertTriangle, BookOpen, Settings, Loader2 } from "lucide-react";
+import { LayoutDashboard, ListTodo, Map, AlertTriangle, BookOpen, Settings, Loader2, BarChart3 } from "lucide-react";
 import { cn } from "./lib/utils";
 import { getStore, initStore, onStoreChange, unsubscribeRealtime, type DataStoreShape } from "./lib/dataStore";
 import DashboardPage from "./components/pages/Dashboard";
@@ -12,10 +12,11 @@ import DeliverablesPage from "./components/pages/Deliverables";
 import RoadmapPage from "./components/pages/Roadmap";
 import RisksPage from "./components/pages/Risks";
 import DocumentationPage from "./components/pages/Documentation";
+import ReportsPage from "./components/pages/Reports";
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminPanel from "./components/admin/AdminPanel";
 
-type Page = "dashboard" | "deliverables" | "roadmap" | "risks" | "documentation" | "admin";
+type Page = "dashboard" | "deliverables" | "roadmap" | "risks" | "documentation" | "reports" | "admin";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
@@ -95,6 +96,7 @@ export default function App() {
     { id: "roadmap", label: "Roadmap", icon: Map },
     { id: "deliverables", label: "Deliverables", icon: ListTodo },
     { id: "risks", label: "Risks Register", icon: AlertTriangle },
+    { id: "reports", label: "Monthly Reports", icon: BarChart3 },
   ];
 
   // ─── Loading State ────────────────────────────────────
@@ -124,6 +126,8 @@ export default function App() {
         return <RisksPage data={data} />;
       case "documentation":
         return <DocumentationPage data={data} />;
+      case "reports":
+        return <ReportsPage data={data} />;
       case "admin":
         return adminUser ? (
           <AdminPanel
