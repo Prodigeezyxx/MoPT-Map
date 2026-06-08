@@ -56,7 +56,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
             MoPT
           </h1>
           <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            Multi-Profession Training Platform
+            MoPT Team dashboard and roadmap
           </p>
         </div>
 
